@@ -6,28 +6,34 @@
 
 ## Current focus
 
-Initial Shopify app setup and project structure.
+Initial Shopify app setup is complete. Next focus is opening the embedded app UI and preparing the MerchantFix dashboard structure.
 
 ## What works
 
-- Empty repo prepared
+- Shopify Partner/dev setup is working.
+- MerchantFix dev store is visible in Shopify admin.
+- Shopify Dev Console is visible.
+- App/dev preview connection appears active.
+- Repo has been initialized.
+- Project memory docs and folder structure have been added.
 
 ## What is broken
 
-- App not tested yet
-- Shopify dev store install not confirmed yet
-- Scanner not implemented yet
+- Actual MerchantFix scanner is not implemented yet.
+- Product import is not implemented yet.
+- Dashboard has not been customized yet.
+- Shopify Billing is not implemented yet.
 
 ## Next 3 tasks
 
-1. Run the Shopify app locally.
-2. Install app on a Shopify development store.
-3. Create first product import function.
+1. Open the app from Shopify admin or the Web preview link and confirm the starter app UI loads.
+2. Commit the initialized repo if not already committed.
+3. Start building the MerchantFix dashboard page structure.
 
 ## Last command used
 
-Not started yet.
+shopify app dev
 
 ## Notes for next session
 
-Do not start billing or AI features yet. First confirm Shopify app setup, OAuth, and local dev flow work.
+Do not start billing, AI features, or Google Merchant Center API integration yet. First confirm the embedded Shopify app opens correctly, then build the basic dashboard and scanner structure.
