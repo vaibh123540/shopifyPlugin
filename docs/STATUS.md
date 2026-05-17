@@ -6,34 +6,72 @@
 
 ## Current focus
 
-Initial Shopify app setup is complete. Next focus is opening the embedded app UI and preparing the MerchantFix dashboard structure.
+Phase 2 dashboard shell is now working inside the Shopify Admin embedded app preview. The next focus is to commit this working checkpoint, run type checking, and then begin Phase 3 product import from the Shopify Admin GraphQL API.
 
 ## What works
 
 - Shopify Partner/dev setup is working.
-- MerchantFix dev store is visible in Shopify admin.
+- MerchantFix development store is visible in Shopify admin.
 - Shopify Dev Console is visible.
-- App/dev preview connection appears active.
+- Shopify CLI dev preview is working through Cloudflare tunnel.
+- Embedded app opens inside Shopify Admin through the dev preview URL.
+- Starter Shopify template screen has been replaced with the MerchantFix dashboard shell.
+- MerchantFix dashboard currently shows:
+  - Page heading: MerchantFix
+  - Primary action: Run scan
+  - Google Shopping readiness scanner intro card
+  - Current phase card
+  - Readiness score placeholder
+  - Scan status placeholder
+  - Issue summary placeholder
+  - Product issues table placeholder
+  - MVP scope sidebar
+  - Next build steps sidebar
+- The unsupported `s-app-nav` usage was removed from `app/routes/app.tsx`.
+- `app/routes/app.tsx` now wraps the app with `AppProvider` and renders the route through `Outlet`.
+- The app route file currently used for the dashboard is `app/routes/app._index.tsx`.
 - Repo has been initialized.
 - Project memory docs and folder structure have been added.
 
-## What is broken
+## What is not implemented yet
 
 - Actual MerchantFix scanner is not implemented yet.
 - Product import is not implemented yet.
-- Dashboard has not been customized yet.
+- Product snapshot type is not implemented yet.
+- Missing barcode scanner rule is not implemented yet.
+- Dashboard score is not calculated yet.
+- Product issue table does not show real product data yet.
+- CSV export is not implemented yet.
 - Shopify Billing is not implemented yet.
+- AI rewrite suggestions are not implemented yet.
+- Google Merchant Center API integration is not implemented and is intentionally out of MVP scope.
+
+## Known development notes
+
+- If Shopify Admin shows `Example Domain` or a dead `trycloudflare.com` page, the dev preview is likely stale or pointing to the wrong URL.
+- The reliable way to open the current embedded app preview is to run `npm run dev` or `shopify app dev`, then press `p` in the Shopify CLI terminal or use the printed Preview URL.
+- The direct sidebar app link may not always load the newest dev preview URL during local development.
+- `npm warn Unknown project config "shamefully-hoist"` appeared during development but did not block the app from running.
 
 ## Next 3 tasks
 
-1. Open the app from Shopify admin or the Web preview link and confirm the starter app UI loads.
-2. Commit the initialized repo if not already committed.
-3. Start building the MerchantFix dashboard page structure.
+1. Commit the working dashboard shell checkpoint.
+2. Run `npm run typecheck` and fix any TypeScript issues.
+3. Start Phase 3 by fetching products and variants from the Shopify Admin GraphQL API.
 
-## Last command used
+## Last confirmed command
 
-shopify app dev
+```bash
+npm run dev
+```
+
+Shopify CLI confirmed:
+
+- Dev store: `merchantfix.myshopify.com`
+- App: `merchantfix`
+- Access scope auto-granted: `write_products`
+- App preview was ready and watching for changes.
 
 ## Notes for next session
 
-Do not start billing, AI features, or Google Merchant Center API integration yet. First confirm the embedded Shopify app opens correctly, then build the basic dashboard and scanner structure.
+Do not start billing, AI features, storefront widgets, checkout extensions, or Google Merchant Center API integration yet. The next build step is product import, then the first deterministic scanner rule for missing barcode / GTIN.

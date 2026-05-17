@@ -1,13 +1,13 @@
-import { useEffect } from "react";
-import type {
-  ActionFunctionArgs,
-  HeadersFunction,
-  LoaderFunctionArgs,
-} from "react-router";
+import type { HeadersFunction, LoaderFunctionArgs } from "react-router";
 import { useFetcher } from "react-router";
-import { useAppBridge } from "@shopify/app-bridge-react";
-import { authenticate } from "../shopify.server";
 import { boundary } from "@shopify/shopify-app-react-router/server";
+
+import { authenticate } from "../shopify.server";
+
+type ScanActionResponse = {
+  status: "placeholder";
+  message: string;
+};
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   await authenticate.admin(request);
@@ -15,234 +15,191 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return null;
 };
 
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const { admin } = await authenticate.admin(request);
-  const color = ["Red", "Orange", "Yellow", "Green"][
-    Math.floor(Math.random() * 4)
-  ];
-  const response = await admin.graphql(
-    `#graphql
-      mutation populateProduct($product: ProductCreateInput!) {
-        productCreate(product: $product) {
-          product {
-            id
-            title
-            handle
-            status
-            variants(first: 10) {
-              edges {
-                node {
-                  id
-                  price
-                  barcode
-                  createdAt
-                }
-              }
-            }
-          }
-        }
-      }`,
-    {
-      variables: {
-        product: {
-          title: `${color} Snowboard`,
-        },
-      },
-    },
-  );
-  const responseJson = await response.json();
-
-  const product = responseJson.data!.productCreate!.product!;
-  const variantId = product.variants.edges[0]!.node!.id!;
-
-  const variantResponse = await admin.graphql(
-    `#graphql
-    mutation shopifyReactRouterTemplateUpdateVariant($productId: ID!, $variants: [ProductVariantsBulkInput!]!) {
-      productVariantsBulkUpdate(productId: $productId, variants: $variants) {
-        productVariants {
-          id
-          price
-          barcode
-          createdAt
-        }
-      }
-    }`,
-    {
-      variables: {
-        productId: product.id,
-        variants: [{ id: variantId, price: "100.00" }],
-      },
-    },
-  );
-
-  const variantResponseJson = await variantResponse.json();
+export const action = async ({
+  request,
+}: {
+  request: Request;
+}): Promise<ScanActionResponse> => {
+  await authenticate.admin(request);
 
   return {
-    product: responseJson!.data!.productCreate!.product,
-    variant:
-      variantResponseJson!.data!.productVariantsBulkUpdate!.productVariants,
+    status: "placeholder",
+    message:
+      "Scanner is not connected yet. Product import and scanner rules will be added in the next phase.",
   };
 };
 
 export default function Index() {
   const fetcher = useFetcher<typeof action>();
 
-  const shopify = useAppBridge();
-  const isLoading =
+  const isScanning =
     ["loading", "submitting"].includes(fetcher.state) &&
     fetcher.formMethod === "POST";
 
-  useEffect(() => {
-    if (fetcher.data?.product?.id) {
-      shopify.toast.show("Product created");
-    }
-  }, [fetcher.data?.product?.id, shopify]);
-
-  const generateProduct = () => fetcher.submit({}, { method: "POST" });
+  const runScan = () => {
+    fetcher.submit({}, { method: "POST" });
+  };
 
   return (
-    <s-page heading="Shopify app template">
-      <s-button slot="primary-action" onClick={generateProduct}>
-        Generate a product
+    <s-page heading="MerchantFix">
+      <s-button
+        slot="primary-action"
+        onClick={runScan}
+        {...(isScanning ? { loading: true } : {})}
+      >
+        Run scan
       </s-button>
 
-      <s-section heading="Congrats on creating a new Shopify app 🎉">
-        <s-paragraph>
-          This embedded app template uses{" "}
-          <s-link
-            href="https://shopify.dev/docs/apps/tools/app-bridge"
-            target="_blank"
-          >
-            App Bridge
-          </s-link>{" "}
-          interface examples like an{" "}
-          <s-link href="/app/additional">additional page in the app nav</s-link>
-          , as well as an{" "}
-          <s-link
-            href="https://shopify.dev/docs/api/admin-graphql"
-            target="_blank"
-          >
-            Admin GraphQL
-          </s-link>{" "}
-          mutation demo, to provide a starting point for app development.
-        </s-paragraph>
-      </s-section>
-      <s-section heading="Get started with products">
-        <s-paragraph>
-          Generate a product with GraphQL and get the JSON output for that
-          product. Learn more about the{" "}
-          <s-link
-            href="https://shopify.dev/docs/api/admin-graphql/latest/mutations/productCreate"
-            target="_blank"
-          >
-            productCreate
-          </s-link>{" "}
-          mutation in our API references.
-        </s-paragraph>
-        <s-stack direction="inline" gap="base">
-          <s-button
-            onClick={generateProduct}
-            {...(isLoading ? { loading: true } : {})}
-          >
-            Generate a product
-          </s-button>
-          {fetcher.data?.product && (
-            <s-button
-              onClick={() => {
-                shopify.intents.invoke?.("edit:shopify/Product", {
-                  value: fetcher.data?.product?.id,
-                });
-              }}
-              target="_blank"
-              variant="tertiary"
-            >
-              Edit product
-            </s-button>
-          )}
-        </s-stack>
-        {fetcher.data?.product && (
-          <s-section heading="productCreate mutation">
-            <s-stack direction="block" gap="base">
-              <s-box
-                padding="base"
-                borderWidth="base"
-                borderRadius="base"
-                background="subdued"
-              >
-                <pre style={{ margin: 0 }}>
-                  <code>{JSON.stringify(fetcher.data.product, null, 2)}</code>
-                </pre>
-              </s-box>
+      <s-section heading="Google Shopping readiness scanner">
+        <s-stack direction="block" gap="base">
+          <s-paragraph>
+            MerchantFix helps Shopify merchants find product catalog issues that
+            may affect Google Shopping and Merchant Center readiness.
+          </s-paragraph>
 
-              <s-heading>productVariantsBulkUpdate mutation</s-heading>
-              <s-box
-                padding="base"
-                borderWidth="base"
-                borderRadius="base"
-                background="subdued"
-              >
-                <pre style={{ margin: 0 }}>
-                  <code>{JSON.stringify(fetcher.data.variant, null, 2)}</code>
-                </pre>
-              </s-box>
+          <s-box
+            padding="base"
+            borderWidth="base"
+            borderRadius="base"
+            background="subdued"
+          >
+            <s-stack direction="block" gap="small">
+              <s-heading>Current phase</s-heading>
+              <s-paragraph>
+                Dashboard shell is ready. Product import and scanner rules are
+                coming next.
+              </s-paragraph>
             </s-stack>
-          </s-section>
-        )}
+          </s-box>
+        </s-stack>
       </s-section>
 
-      <s-section slot="aside" heading="App template specs">
-        <s-paragraph>
-          <s-text>Framework: </s-text>
-          <s-link href="https://reactrouter.com/" target="_blank">
-            React Router
-          </s-link>
-        </s-paragraph>
-        <s-paragraph>
-          <s-text>Interface: </s-text>
-          <s-link
-            href="https://shopify.dev/docs/api/app-home/using-polaris-components"
-            target="_blank"
+      <s-section heading="Readiness score">
+        <s-stack direction="block" gap="base">
+          <s-box
+            padding="base"
+            borderWidth="base"
+            borderRadius="base"
+            background="subdued"
           >
-            Polaris web components
-          </s-link>
-        </s-paragraph>
-        <s-paragraph>
-          <s-text>API: </s-text>
-          <s-link
-            href="https://shopify.dev/docs/api/admin-graphql"
-            target="_blank"
-          >
-            GraphQL
-          </s-link>
-        </s-paragraph>
-        <s-paragraph>
-          <s-text>Database: </s-text>
-          <s-link href="https://www.prisma.io/" target="_blank">
-            Prisma
-          </s-link>
-        </s-paragraph>
+            <s-stack direction="block" gap="small">
+              <s-heading>-- / 100</s-heading>
+              <s-paragraph>
+                No scan has been run yet. Once product import is connected, this
+                score will show the store&apos;s Google Shopping readiness.
+              </s-paragraph>
+            </s-stack>
+          </s-box>
+        </s-stack>
       </s-section>
 
-      <s-section slot="aside" heading="Next steps">
+      <s-section heading="Scan status">
+        <s-stack direction="block" gap="base">
+          <s-box padding="base" borderWidth="base" borderRadius="base">
+            <s-stack direction="block" gap="small">
+              <s-heading>
+                {fetcher.data?.status === "placeholder"
+                  ? "Scan placeholder triggered"
+                  : "No scan yet"}
+              </s-heading>
+
+              <s-paragraph>
+                {fetcher.data?.message ||
+                  "Click Run scan when the scanner is connected. For now, this button only confirms the dashboard action is wired."}
+              </s-paragraph>
+            </s-stack>
+          </s-box>
+        </s-stack>
+      </s-section>
+
+      <s-section heading="Issue summary">
+        <s-stack direction="block" gap="base">
+          <s-box padding="base" borderWidth="base" borderRadius="base">
+            <s-stack direction="block" gap="small">
+              <s-heading>Coming scanner checks</s-heading>
+
+              <s-unordered-list>
+                <s-list-item>Missing barcode / GTIN</s-list-item>
+                <s-list-item>Missing vendor / brand</s-list-item>
+                <s-list-item>Missing product image</s-list-item>
+                <s-list-item>Short product title</s-list-item>
+                <s-list-item>Short product description</s-list-item>
+                <s-list-item>Duplicate product title</s-list-item>
+                <s-list-item>Missing Google product category</s-list-item>
+              </s-unordered-list>
+            </s-stack>
+          </s-box>
+        </s-stack>
+      </s-section>
+
+      <s-section heading="Product issues">
+        <s-box padding="base" borderWidth="base" borderRadius="base">
+          <div style={{ overflowX: "auto" }}>
+            <table
+              style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                textAlign: "left",
+              }}
+            >
+              <thead>
+                <tr>
+                  <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>
+                    Product
+                  </th>
+                  <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>
+                    Issue
+                  </th>
+                  <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>
+                    Severity
+                  </th>
+                  <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>
+                    Suggested fix
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+                    —
+                  </td>
+                  <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+                    No issues yet
+                  </td>
+                  <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+                    —
+                  </td>
+                  <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+                    Run a scan after product import is connected.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </s-box>
+      </s-section>
+
+      <s-section slot="aside" heading="MVP scope">
+        <s-paragraph>
+          MerchantFix is currently focused on deterministic product catalog
+          checks for Google Shopping readiness.
+        </s-paragraph>
+
         <s-unordered-list>
-          <s-list-item>
-            Build an{" "}
-            <s-link
-              href="https://shopify.dev/docs/apps/getting-started/build-app-example"
-              target="_blank"
-            >
-              example app
-            </s-link>
-          </s-list-item>
-          <s-list-item>
-            Explore Shopify&apos;s API with{" "}
-            <s-link
-              href="https://shopify.dev/docs/apps/tools/graphiql-admin-api"
-              target="_blank"
-            >
-              GraphiQL
-            </s-link>
-          </s-list-item>
+          <s-list-item>No Google Merchant Center API yet</s-list-item>
+          <s-list-item>No Shopify Billing yet</s-list-item>
+          <s-list-item>No AI suggestions yet</s-list-item>
+          <s-list-item>No storefront or checkout extensions</s-list-item>
+        </s-unordered-list>
+      </s-section>
+
+      <s-section slot="aside" heading="Next build steps">
+        <s-unordered-list>
+          <s-list-item>Fetch products from Shopify Admin GraphQL API</s-list-item>
+          <s-list-item>Create product snapshot type</s-list-item>
+          <s-list-item>Add missing barcode scanner rule</s-list-item>
+          <s-list-item>Show real product issues in this dashboard</s-list-item>
         </s-unordered-list>
       </s-section>
     </s-page>

@@ -25,6 +25,25 @@ Shopify merchants running Google Shopping, Performance Max, or free product list
 - Export CSV
 - Paid unlock through Shopify Billing
 
+## Current product status
+
+The MerchantFix dashboard shell is now visible inside Shopify Admin through the development preview.
+
+The dashboard currently communicates the product direction and includes placeholders for:
+
+- Readiness score
+- Scan status
+- Issue summary
+- Product issues
+- MVP scope
+- Next build steps
+
+The app does not scan real products yet. The next product milestone is importing products and variants from Shopify Admin GraphQL API.
+
+## First scanner promise
+
+The first real scanner rule should identify variants with missing barcode / GTIN data.
+
 ## Not building yet
 
 - Full feed manager
@@ -34,3 +53,4 @@ Shopify merchants running Google Shopping, Performance Max, or free product list
 - Agency dashboard
 - Theme extension
 - Checkout extension
+- AI rewrite suggestions
