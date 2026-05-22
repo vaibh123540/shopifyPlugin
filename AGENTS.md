@@ -14,23 +14,56 @@ MerchantFix is a Shopify embedded app that scans product catalogs for Google Sho
 - Prefer simple code over clever abstractions.
 - Use TypeScript.
 - Keep database migrations explicit.
-- Update docs when architecture or product decisions change.
+- Update docs when architecture, product status, or major decisions change.
+- Keep the app focused on the current MVP flow: import products/variants -> run scanner rules -> show issues.
+
+## Current working checkpoint
+
+The embedded dashboard can import product variants from Shopify Admin GraphQL API and run the missing barcode / GTIN scanner rule.
+
+Current key files:
+
+- `app/routes/app._index.tsx`
+- `app/routes/app.tsx`
+- `app/lib/shopify/product-import.server.ts`
+- `app/lib/scanner/types.ts`
+- `app/lib/scanner/run-scan.server.ts`
+- `app/lib/scanner/rules/missing-barcode.server.ts`
 
 ## Before coding
 
 Read:
 
-- docs/PRODUCT.md
-- docs/ARCHITECTURE.md
-- docs/ROADMAP.md
-- docs/STATUS.md
-- docs/DECISIONS.md
-- docs/AI_HANDOFF.md
+- `docs/PRODUCT.md`
+- `docs/ARCHITECTURE.md`
+- `docs/ROADMAP.md`
+- `docs/STATUS.md`
+- `docs/DECISIONS.md`
+- `docs/AI_HANDOFF.md`
+- `docs/TASKS.md`
+
+## Current next task
+
+Add the missing vendor / brand scanner rule.
+
+Do not start:
+
+- Shopify Billing
+- AI suggestions
+- Google Merchant Center API
+- CSV export
+- Storefront widgets
+- Checkout extensions
+
+until the deterministic scanner rules and report UI are more complete.
 
 ## After coding
 
 Update:
 
-- docs/STATUS.md
-- docs/ROADMAP.md
-- docs/DECISIONS.md if a major decision was made
+- `docs/STATUS.md`
+- `docs/ROADMAP.md`
+- `docs/TASKS.md`
+- `docs/AI_HANDOFF.md`
+- `docs/DECISIONS.md` if a major decision was made
+- `docs/UPDATE_SUMMARY.md` after meaningful checkpoints

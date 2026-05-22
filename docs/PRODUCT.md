@@ -27,22 +27,49 @@ Shopify merchants running Google Shopping, Performance Max, or free product list
 
 ## Current product status
 
-The MerchantFix dashboard shell is now visible inside Shopify Admin through the development preview.
+MerchantFix now has a working embedded dashboard inside Shopify Admin.
 
-The dashboard currently communicates the product direction and includes placeholders for:
+The dashboard can:
 
-- Readiness score
-- Scan status
-- Issue summary
-- Product issues
-- MVP scope
-- Next build steps
+- Run a real catalog scan from the embedded app UI.
+- Import product and variant data from Shopify Admin GraphQL API.
+- Group imported variants into product snapshots.
+- Run the first deterministic scanner rule: missing barcode / GTIN.
+- Show a first readiness score.
+- Show scan status and last scanned timestamp.
+- Show imported product count.
+- Show imported variant count.
+- Show active variants scanned.
+- Show issue summary counts.
+- Show a product variant debug table with issue status.
 
-The app does not scan real products yet. The next product milestone is importing products and variants from Shopify Admin GraphQL API.
+## Last confirmed scan result
+
+Confirmed in the Shopify development store on 2026-05-21:
+
+- Imported products: 17
+- Imported variants: 26
+- Active variants scanned: 24
+- Missing barcode / GTIN issues: 24
+- Critical issues: 24
+- Affected products: 15
+- Affected variants: 24
+- Readiness score: 0 / 100
+- More variants after debug limit: No
+
+The 0 / 100 score is expected for the current seed catalog because every active variant in the debug import is missing barcode / GTIN data.
 
 ## First scanner promise
 
-The first real scanner rule should identify variants with missing barcode / GTIN data.
+The first real scanner rule identifies active product variants with missing barcode / GTIN data.
+
+The rule currently ignores draft and archived products for issue counting, but those products still appear in the imported debug table for visibility.
+
+## Next product milestone
+
+Add the next deterministic scanner rule: missing vendor / brand.
+
+After that, add missing product image and improve issue detail UI with deterministic fix suggestions.
 
 ## Not building yet
 

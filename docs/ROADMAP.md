@@ -7,7 +7,7 @@
 - [x] Connect Shopify dev environment
 - [x] Confirm Shopify dev store appears in admin
 - [x] Confirm embedded app UI loads from Shopify admin through dev preview
-- [ ] Commit initial repo setup / working dashboard checkpoint
+- [x] Commit initial repo setup / working dashboard checkpoint
 
 ## Phase 2: MerchantFix dashboard shell
 
@@ -22,33 +22,39 @@
 
 ## Phase 3: Product import
 
-- [ ] Fetch products from Shopify Admin GraphQL API
-- [ ] Fetch variants from Shopify Admin GraphQL API
-- [ ] Handle pagination
-- [ ] Create product snapshot type
-- [ ] Render imported product count on dashboard
-- [ ] Render product data in dashboard table for debugging
+- [x] Fetch products from Shopify Admin GraphQL API
+- [x] Fetch variants from Shopify Admin GraphQL API
+- [x] Handle debug import limit up to 100 variants
+- [x] Create product snapshot type
+- [x] Render imported product count on dashboard
+- [x] Render imported variant count on dashboard
+- [x] Render product data in dashboard table for debugging
+- [x] Add `read_products` scope for catalog import
 
 ## Phase 4: Scanner
 
-- [ ] Missing barcode / GTIN rule
+- [x] Missing barcode / GTIN rule
 - [ ] Missing vendor / brand rule
 - [ ] Missing image rule
 - [ ] Short title rule
 - [ ] Short description rule
 - [ ] Duplicate title rule
 - [ ] Missing product category rule
-- [ ] Basic readiness score calculation
-- [ ] Issue severity categories
+- [x] Basic readiness score calculation for first scanner rule
+- [x] Issue severity categories for first scanner rule
+- [x] Skip draft and archived products from issue counts
 
 ## Phase 5: Report UI
 
-- [ ] Real issue summary cards
-- [ ] Product issue table with affected products
-- [ ] Suggested deterministic fixes
+- [x] Real issue summary cards for missing barcode / GTIN
+- [x] Product issue table flags affected variants for missing barcode / GTIN
+- [x] Scan status shows imported variants and issue count
+- [x] Debug table shows product, vendor, status, variant, SKU, barcode, issue, price, and image
+- [ ] Suggested deterministic fixes shown in dedicated issue UI
 - [ ] Empty states
 - [ ] Loading states
 - [ ] Error states
+- [ ] Better issue grouping/filtering
 
 ## Phase 6: Monetization
 
@@ -65,3 +71,5 @@
 - [ ] Agency dashboard
 - [ ] Theme extension
 - [ ] Checkout extension
+- [ ] Background scans
+- [ ] Persistent scan history

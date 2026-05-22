@@ -41,3 +41,39 @@ Reason: The current MVP has only one page. An attempted `s-app-nav` block caused
 Decision: Use the Shopify CLI dev preview URL or press `p` in the running CLI to open the embedded app during local development.
 
 Reason: The Shopify Admin sidebar app link can sometimes point to a stale or incorrect tunnel during development, causing `Example Domain` or Cloudflare tunnel errors.
+
+## Product import decision
+
+Decision: Use Shopify Admin GraphQL `productVariants` as the first import path instead of querying products first.
+
+Reason: The first scanner rule is variant-level missing barcode / GTIN, so importing variants first gives the scanner the exact data it needs while still returning associated product data.
+
+## Product read scope decision
+
+Decision: Add `read_products` to the Shopify app access scopes for the product import phase.
+
+Reason: MerchantFix must read product and variant data from Shopify Admin GraphQL API before it can scan the catalog.
+
+## Debug import limit decision
+
+Decision: Limit the embedded dashboard debug scan to 100 variants for now.
+
+Reason: This keeps Run Scan fast during development. Full pagination, persistence, and background scan behavior can be added after the scanner rules prove useful.
+
+## Active product scan decision
+
+Decision: Import draft and archived products for debug visibility, but count scanner issues only for active products.
+
+Reason: Draft and archived products are useful to see in development, but they should not lower the merchant's Google Shopping readiness score in the first MVP scanner pass.
+
+## First scanner rule decision
+
+Decision: Implement missing barcode / GTIN as the first deterministic scanner rule.
+
+Reason: Google Shopping readiness often depends on product identifiers. This rule is easy to validate from Shopify variant data and directly supports the product's core promise.
+
+## Readiness score decision
+
+Decision: Start with a simple readiness score based only on active variant barcode / GTIN coverage.
+
+Reason: A simple score is enough for the first scanner checkpoint. Score weighting should become more nuanced only after multiple scanner rules are implemented.

@@ -404,3 +404,39 @@ This is a smart spread. Shopify is the serious money play, Discord is the recurr
 [5]: https://support.patreon.com/hc/en-us/articles/213552323-Setting-up-Discord-for-your-members?utm_source=chatgpt.com "Setting up Discord for your members"
 [6]: https://create.roblox.com/docs/studio/plugins?utm_source=chatgpt.com "Studio plugins | Documentation - Roblox Creator Hub"
 [7]: https://create.roblox.com/docs/production/monetization?utm_source=chatgpt.com "Monetization | Documentation"
+---
+
+# Current Shopify implementation checkpoint
+
+Updated on 2026-05-21.
+
+MerchantFix remains the flagship product in the portfolio.
+
+The Shopify app has progressed beyond the dashboard shell:
+
+- Embedded Shopify Admin dashboard is working.
+- Product and variant import is working through Shopify Admin GraphQL API.
+- Product variants are grouped into product snapshots.
+- The first deterministic scanner rule is working: missing barcode / GTIN.
+- The dashboard now shows a real readiness score and real issue counts.
+
+Last confirmed Shopify dev-store scan:
+
+| Metric | Value |
+| --- | ---: |
+| Imported products | 17 |
+| Imported variants | 26 |
+| Active variants scanned | 24 |
+| Missing barcode / GTIN issues | 24 |
+| Critical issues | 24 |
+| Affected products | 15 |
+| Affected variants | 24 |
+| Readiness score | 0 / 100 |
+
+This confirms the flagship Shopify idea has moved from concept into a working technical MVP path.
+
+Next Shopify build step:
+
+> Add missing vendor / brand as the second deterministic scanner rule.
+
+Discord and Roblox remain later portfolio ideas. Do not start them until the Shopify scanner MVP has more complete scanner coverage and report UI.
