@@ -17,10 +17,11 @@ You are helping build MerchantFix, a Shopify embedded app that scans a merchant'
 
 Phase 3 product import is working.
 
-Phase 4 scanner work now has two deterministic scanner rules connected:
+Phase 4 scanner work now has three deterministic scanner rules connected:
 
 1. Missing barcode / GTIN.
 2. Missing vendor / brand.
+3. Missing product image.
 
 The dashboard imports real Shopify product variants, groups them into product snapshots, runs the scanner rules, calculates a readiness score across the active catalog, and displays real issue counts.
 
@@ -44,6 +45,7 @@ Scanner files:
 - `app/lib/scanner/run-scan.server.ts`
 - `app/lib/scanner/rules/missing-barcode.server.ts`
 - `app/lib/scanner/rules/missing-vendor.server.ts`
+- `app/lib/scanner/rules/missing-image.server.ts`
 
 Current dashboard includes:
 
@@ -51,10 +53,10 @@ Current dashboard includes:
 - Primary action: Run scan
 - Google Shopping readiness scanner intro
 - Current phase card
-- Readiness score based on active product checks for missing barcode / GTIN and missing vendor / brand
+- Readiness score based on active product checks for missing barcode / GTIN, missing vendor / brand, and missing product image
 - Scan status card
 - Imported catalog debug cards
-- Real issue summary cards for missing barcode / GTIN and missing vendor / brand
+- Real issue summary cards for missing barcode / GTIN, missing vendor / brand, and missing product image
 - Active scanner checks list
 - Imported product variant debug table with issue column
 - MVP scope sidebar
@@ -66,32 +68,36 @@ Current dashboard includes:
 - Groups variants into product snapshots.
 - Runs the missing barcode / GTIN rule.
 - Runs the missing vendor / brand rule.
+- Runs the missing product image rule.
 - Counts issues only for active products.
 - Imports draft and archived products for visibility, but skips them from issue counts.
 - Calculates a readiness score based on active product/variant checks currently implemented.
 - Marks active variants missing barcode / GTIN as critical issues.
 - Marks active products missing vendor / brand as warning issues.
+- Marks active products missing featured image as critical issues.
 
 ## Last confirmed working scan
 
-Confirmed in the Shopify development store on 2026-05-24 at approximately 16:44 local time:
+Confirmed in the Shopify development store on 2026-05-24 at approximately 16:53 local time:
 
+- Scan status: Scan complete
 - Imported products: 17
 - Imported variants: 26
 - Active variants scanned: 24
 - More variants after debug limit: No
 - Missing barcode / GTIN issues: 24
 - Missing vendor / brand issues: 0
-- Critical issues: 24
+- Missing product image issues: 1
+- Total issues: 25
+- Critical issues: 25
 - Affected products: 15
 - Affected variants: 24
-- Readiness score: 38 / 100
+- Readiness score: 54 / 100
 
-This is considered successful because the current dev store's active variants are missing barcode / GTIN values, while active products have vendor / brand values. Draft and archived products appeared in the debug table but were not counted as scanner issues.
+This is considered successful because the current dev store's active variants are missing barcode / GTIN values, active products have vendor / brand values, and exactly one active product (`The Minimal Snowboard`) is missing a product image. Draft and archived products appeared in the debug table but were not counted as scanner issues.
 
 ## Current known issues
 
-- Missing image rule is not implemented yet.
 - Short title rule is not implemented yet.
 - Short description rule is not implemented yet.
 - Duplicate title rule is not implemented yet.
@@ -112,12 +118,12 @@ This is considered successful because the current dev store's active variants ar
 
 ## Next task
 
-Run typecheck, review the diff, commit and push the missing vendor / brand scanner checkpoint.
+Run typecheck, review the diff, commit and push the missing image scanner checkpoint.
 
-Then start the next deterministic scanner rule:
+Then start the next product/report step:
 
-1. Missing image.
-2. Improve issue detail UI with deterministic suggested fixes.
-3. Improve readiness score weighting across multiple rules.
+1. Add issue detail UI with deterministic suggested fixes.
+2. Improve readiness score weighting across multiple rules.
+3. Then continue with the next scanner rule, likely short title or short description.
 
 Do not start billing, AI features, storefront widgets, checkout extensions, or Google Merchant Center API integration yet.

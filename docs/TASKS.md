@@ -32,6 +32,11 @@
 - [x] Display real issue summary count for missing vendor / brand
 - [x] Confirm Run Scan finds 0 missing vendor / brand issues in the dev store
 - [x] Confirm readiness score is 38 / 100 with barcode and vendor checks active
+- [x] Implement missing product image scanner rule
+- [x] Display real issue summary count for missing product image
+- [x] Confirm Run Scan finds 1 missing product image issue in the dev store
+- [x] Confirm total issues increased to 25 after adding image check
+- [x] Confirm readiness score is 54 / 100 with barcode, vendor, and image checks active
 
 ## Now
 
@@ -39,19 +44,18 @@
 - [ ] Fix any TypeScript or route errors from typecheck
 - [ ] Review `git status`
 - [ ] Review `git diff`
-- [ ] Commit Phase 4B missing vendor scanner checkpoint
+- [ ] Commit Phase 4C missing image scanner checkpoint
 - [ ] Push changes to GitHub
 
 ## Next
 
-- [ ] Add missing image scanner rule
 - [ ] Add issue detail UI with suggested deterministic fixes
 - [ ] Improve readiness score weighting across multiple rules
+- [ ] Add short title scanner rule
+- [ ] Add short description scanner rule
 
 ## Later
 
-- [ ] Short title scanner rule
-- [ ] Short description scanner rule
 - [ ] Duplicate title scanner rule
 - [ ] Missing Google product category rule
 - [ ] Empty states

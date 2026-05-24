@@ -2,9 +2,12 @@ import type { ProductSnapshot } from "../shopify/product-import.server";
 
 export type IssueSeverity = "critical" | "warning" | "info";
 
-export type IssueRuleId = "missing_barcode_gtin" | "missing_vendor_brand";
+export type IssueRuleId =
+  | "missing_barcode_gtin"
+  | "missing_vendor_brand"
+  | "missing_product_image";
 
-export type IssueField = "barcode" | "vendor";
+export type IssueField = "barcode" | "vendor" | "featuredImage";
 
 export type ProductIssue = {
   id: string;
@@ -30,6 +33,7 @@ export type ScanSummary = {
   infoIssues: number;
   missingBarcodeIssues: number;
   missingVendorIssues: number;
+  missingImageIssues: number;
   affectedProducts: number;
   affectedVariants: number;
   scannedProducts: number;

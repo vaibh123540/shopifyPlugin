@@ -39,6 +39,7 @@ The Shopify app has progressed beyond the dashboard shell:
 - Product variants are grouped into product snapshots.
 - The first deterministic scanner rule is working: missing barcode / GTIN.
 - The second deterministic scanner rule is working: missing vendor / brand.
+- The third deterministic scanner rule is working: missing product image.
 - The dashboard now shows a readiness score and real issue counts across implemented scanner rules.
 
 Last confirmed Shopify dev-store scan:
@@ -50,15 +51,17 @@ Last confirmed Shopify dev-store scan:
 | Active variants scanned | 24 |
 | Missing barcode / GTIN issues | 24 |
 | Missing vendor / brand issues | 0 |
-| Critical issues | 24 |
+| Missing product image issues | 1 |
+| Total issues | 25 |
+| Critical issues | 25 |
 | Affected products | 15 |
 | Affected variants | 24 |
-| Readiness score | 38 / 100 |
+| Readiness score | 54 / 100 |
 
 This confirms the flagship Shopify idea has moved further into a working technical MVP path.
 
 Next Shopify build step:
 
-> Add missing image as the third deterministic scanner rule.
+> Add issue detail UI with deterministic suggested fixes.
 
 Discord and Roblox remain later portfolio ideas. Do not start them until the Shopify scanner MVP has more complete scanner coverage and report UI.

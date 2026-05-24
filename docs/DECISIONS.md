@@ -76,22 +76,22 @@ Reason: Google Shopping readiness often depends on product identifiers. This rul
 
 Decision: Start with a simple readiness score based on implemented active catalog checks.
 
-Reason: A simple score is enough while scanner rules are still being added. Score weighting should become more nuanced only after multiple scanner rules are implemented.
+Reason: A simple score is enough for scanner checkpoints. Score weighting should become more nuanced only after multiple scanner rules and report UI are implemented.
 
 ## Product-level issue decision
 
-Decision: Allow scanner issues to be product-level or variant-level.
+Decision: Support product-level scanner issues in addition to variant-level issues.
 
-Reason: Missing barcode / GTIN is a variant-level issue, but missing vendor / brand is a product-level issue. The issue model should support both instead of forcing every rule into a variant shape.
+Reason: Some checks, such as vendor / brand and product image, apply to the product as a whole rather than to individual variants. The scanner should represent those honestly instead of forcing every issue to look variant-level.
 
 ## Second scanner rule decision
 
 Decision: Implement missing vendor / brand as the second deterministic scanner rule.
 
-Reason: Brand/vendor data is a common catalog readiness signal. The current product import already includes Shopify's product vendor field, making this a low-risk next rule after barcode / GTIN.
+Reason: Vendor/brand is already available in the Shopify product import, is easy to validate, and supports Google Shopping readiness without requiring Google Merchant Center API integration.
 
-## Next scanner rule decision
+## Third scanner rule decision
 
-Decision: Implement missing image as the next deterministic scanner rule.
+Decision: Implement missing product image as the third deterministic scanner rule.
 
-Reason: The current dev store has at least one active product with a missing image, so the rule can be validated immediately from the existing dashboard debug data.
+Reason: Product images are core feed-readiness data, already available through the Shopify product import, and the current dev store has a known active product missing an image, which makes the rule easy to validate.

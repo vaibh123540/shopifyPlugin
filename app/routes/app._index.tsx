@@ -153,7 +153,7 @@ export default function Index() {
               <s-paragraph>
                 The first deterministic scanner rules are connected. Run scan now
                 imports Shopify variants and flags active products with missing
-                barcode / GTIN or vendor / brand data.
+                barcode / GTIN, vendor / brand, or product image data.
               </s-paragraph>
             </s-stack>
           </s-box>
@@ -172,8 +172,9 @@ export default function Index() {
               <s-heading>{readinessScore}</s-heading>
               <s-paragraph>
                 This first score is based on active product checks for missing
-                barcode / GTIN and missing vendor / brand data. More weighting
-                will be added as scanner rules are implemented.
+                barcode / GTIN, missing vendor / brand, and missing product
+                image data. More weighting will be added as scanner rules are
+                implemented.
               </s-paragraph>
             </s-stack>
           </s-box>
@@ -279,6 +280,13 @@ export default function Index() {
 
             <s-box padding="base" borderWidth="base" borderRadius="base">
               <s-stack direction="block" gap="small">
+                <s-heading>{summary?.missingImageIssues ?? 0}</s-heading>
+                <s-paragraph>Missing product image</s-paragraph>
+              </s-stack>
+            </s-box>
+
+            <s-box padding="base" borderWidth="base" borderRadius="base">
+              <s-stack direction="block" gap="small">
                 <s-heading>{summary?.criticalIssues ?? 0}</s-heading>
                 <s-paragraph>Critical issues</s-paragraph>
               </s-stack>
@@ -305,6 +313,7 @@ export default function Index() {
               <s-unordered-list>
                 <s-list-item>Missing barcode / GTIN</s-list-item>
                 <s-list-item>Missing vendor / brand</s-list-item>
+                <s-list-item>Missing product image</s-list-item>
               </s-unordered-list>
             </s-stack>
           </s-box>
@@ -388,8 +397,8 @@ export default function Index() {
 
       <s-section slot="aside" heading="Next build steps">
         <s-unordered-list>
-          <s-list-item>Add missing vendor / brand scanner rule</s-list-item>
           <s-list-item>Add missing product image scanner rule</s-list-item>
+          <s-list-item>Add issue detail UI with deterministic fixes</s-list-item>
           <s-list-item>Improve readiness score weighting</s-list-item>
           <s-list-item>Add empty, loading, and error states</s-list-item>
         </s-unordered-list>

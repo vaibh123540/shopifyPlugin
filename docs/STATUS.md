@@ -6,12 +6,13 @@
 
 ## Current focus
 
-Phase 3 product import is working, and Phase 4 now has two deterministic scanner rules connected:
+Phase 3 product import is working, and Phase 4 now has three deterministic scanner rules connected:
 
 1. Missing barcode / GTIN.
 2. Missing vendor / brand.
+3. Missing product image.
 
-The latest confirmed state is successful. The embedded Shopify dashboard imports real products and variants, runs both scanner rules, and displays real issue counts.
+The latest confirmed state is successful. The embedded Shopify dashboard imports real products and variants, runs all three scanner rules, and displays real issue counts.
 
 ## What works
 
@@ -30,14 +31,17 @@ The latest confirmed state is successful. The embedded Shopify dashboard imports
 - Dashboard displays a product variant debug table.
 - Missing barcode / GTIN scanner rule is implemented.
 - Missing vendor / brand scanner rule is implemented.
-- Issue summary shows real counts for missing barcode / GTIN, missing vendor / brand, critical issues, affected products, and affected variants.
+- Missing product image scanner rule is implemented.
+- Product-level and variant-level scanner issues are supported.
+- Issue summary shows real counts for missing barcode / GTIN, missing vendor / brand, missing product image, critical issues, affected products, and affected variants.
 - A readiness score is calculated from the implemented active catalog checks.
 - Draft and archived products are imported for debug visibility but skipped from issue counting.
 - The debug table shows draft and archived products with no issue when skipped.
+- The debug table can show multiple issues for one product/variant row.
 
 ## Last confirmed scan result
 
-Confirmed in the Shopify development store on 2026-05-24 at approximately 16:44 local time:
+Confirmed in the Shopify development store on 2026-05-24 at approximately 16:53 local time:
 
 - Scan status: Scan complete
 - Imported products: 17
@@ -46,22 +50,29 @@ Confirmed in the Shopify development store on 2026-05-24 at approximately 16:44 
 - More variants after debug limit: No
 - Missing barcode / GTIN issues: 24
 - Missing vendor / brand issues: 0
-- Critical issues: 24
+- Missing product image issues: 1
+- Total issues: 25
+- Critical issues: 25
 - Affected products: 15
 - Affected variants: 24
-- Readiness score: 38 / 100
+- Readiness score: 54 / 100
 
-The 38 / 100 score is expected for the current dev store data because every active variant imported in the debug scan is missing barcode / GTIN data, while active products have vendor / brand values.
+The scan result is expected for the current dev store data:
+
+- Every active variant imported in the debug scan is missing barcode / GTIN data.
+- Active products have vendor / brand data.
+- `The Minimal Snowboard` is active and missing a product image.
+- Draft and archived products appear in the debug table but do not count as scanner issues.
 
 ## What is not implemented yet
 
-- Missing image rule is not implemented yet.
 - Short title rule is not implemented yet.
 - Short description rule is not implemented yet.
 - Duplicate title rule is not implemented yet.
 - Missing Google product category rule is not implemented yet.
 - Suggested deterministic fixes are not implemented yet.
-- Readiness score weighting is still simple and should become more nuanced after more rules are implemented.
+- Dedicated issue detail UI is not implemented yet.
+- Readiness score weighting is still simple and should become more nuanced.
 - CSV export is not implemented yet.
 - Shopify Billing is not implemented yet.
 - AI rewrite suggestions are not implemented yet.
@@ -78,15 +89,15 @@ The 38 / 100 score is expected for the current dev store data because every acti
 
 ## Next 3 tasks
 
-1. Run `npm run typecheck` after applying the missing vendor / brand scanner changes.
+1. Run `npm run typecheck` after applying the missing product image scanner changes.
 2. Review `git status` and `git diff`.
-3. Commit and push the missing vendor / brand scanner checkpoint.
+3. Commit and push the missing image scanner checkpoint.
 
 ## Suggested commit message
 
 ```bash
 git add .
-git commit -m "Add missing vendor scanner rule"
+git commit -m "Add missing image scanner rule"
 git push
 ```
 
@@ -94,4 +105,4 @@ git push
 
 Do not start billing, AI features, storefront widgets, checkout extensions, or Google Merchant Center API integration yet.
 
-The next build step is expanding deterministic scanner rules. Start with missing image, then improve issue detail UI with deterministic suggested fixes.
+The next build step is improving the report UI: add issue detail sections with deterministic suggested fixes, then improve readiness score weighting across multiple rules.

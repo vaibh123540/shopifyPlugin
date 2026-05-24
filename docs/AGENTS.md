@@ -19,10 +19,11 @@ MerchantFix is a Shopify embedded app that scans product catalogs for Google Sho
 
 ## Current working checkpoint
 
-The embedded dashboard can import product variants from Shopify Admin GraphQL API and run two deterministic scanner rules:
+The embedded dashboard can import product variants from Shopify Admin GraphQL API and run three deterministic scanner rules:
 
 1. Missing barcode / GTIN.
 2. Missing vendor / brand.
+3. Missing product image.
 
 Current key files:
 
@@ -33,6 +34,7 @@ Current key files:
 - `app/lib/scanner/run-scan.server.ts`
 - `app/lib/scanner/rules/missing-barcode.server.ts`
 - `app/lib/scanner/rules/missing-vendor.server.ts`
+- `app/lib/scanner/rules/missing-image.server.ts`
 
 ## Before coding
 
@@ -48,9 +50,9 @@ Read:
 
 ## Current next task
 
-Commit and push the missing vendor / brand scanner checkpoint.
+Commit and push the missing image scanner checkpoint.
 
-Then add the missing image scanner rule.
+Then add issue detail UI with deterministic suggested fixes.
 
 Do not start:
 

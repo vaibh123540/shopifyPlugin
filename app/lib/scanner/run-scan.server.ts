@@ -3,6 +3,7 @@ import {
   type ProductImportResult,
 } from "../shopify/product-import.server";
 import { findMissingBarcodeIssues } from "./rules/missing-barcode.server";
+import { findMissingImageIssues } from "./rules/missing-image.server";
 import { findMissingVendorIssues } from "./rules/missing-vendor.server";
 import {
   getScannableProducts,
@@ -27,6 +28,7 @@ export async function runCatalogScan(
   const issues = [
     ...findMissingBarcodeIssues(importResult.products),
     ...findMissingVendorIssues(importResult.products),
+    ...findMissingImageIssues(importResult.products),
   ];
   const summary = buildScanSummary(importResult, issues);
 
@@ -69,11 +71,15 @@ function buildScanSummary(
   const missingVendorIssues = issues.filter(
     (issue) => issue.ruleId === "missing_vendor_brand",
   ).length;
+  const missingImageIssues = issues.filter(
+    (issue) => issue.ruleId === "missing_product_image",
+  ).length;
 
   return {
     readinessScore: calculateReadinessScore({
-      failedChecks: missingBarcodeIssues + missingVendorIssues,
-      totalChecks: scannedVariants + scannableProducts.length,
+      failedChecks:
+        missingBarcodeIssues + missingVendorIssues + missingImageIssues,
+      totalChecks: scannedVariants + scannableProducts.length * 2,
     }),
     totalIssues: issues.length,
     criticalIssues,
@@ -81,6 +87,7 @@ function buildScanSummary(
     infoIssues,
     missingBarcodeIssues,
     missingVendorIssues,
+    missingImageIssues,
     affectedProducts: affectedProductIds.size,
     affectedVariants: affectedVariantIds.size,
     scannedProducts: scannableProducts.length,

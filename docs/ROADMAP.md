@@ -35,21 +35,23 @@
 
 - [x] Missing barcode / GTIN rule
 - [x] Missing vendor / brand rule
-- [ ] Missing image rule
+- [x] Missing image rule
 - [ ] Short title rule
 - [ ] Short description rule
 - [ ] Duplicate title rule
 - [ ] Missing product category rule
 - [x] Basic readiness score calculation for first scanner rule
-- [x] Readiness score updated to include missing vendor / brand checks
-- [x] Issue severity categories for implemented rules
+- [x] Readiness score calculation across implemented active catalog checks
+- [x] Issue severity categories for implemented scanner rules
 - [x] Skip draft and archived products from issue counts
-- [x] Support product-level and variant-level scanner issues
+- [x] Support variant-level issues
+- [x] Support product-level issues
 
 ## Phase 5: Report UI
 
 - [x] Real issue summary cards for missing barcode / GTIN
 - [x] Real issue summary card for missing vendor / brand
+- [x] Real issue summary card for missing product image
 - [x] Product issue table flags affected variants for missing barcode / GTIN
 - [x] Product issue table can display multiple issue titles per row
 - [x] Scan status shows imported variants and issue count
