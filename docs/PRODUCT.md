@@ -34,8 +34,9 @@ The dashboard can:
 - Run a real catalog scan from the embedded app UI.
 - Import product and variant data from Shopify Admin GraphQL API.
 - Group imported variants into product snapshots.
-- Run the first deterministic scanner rule: missing barcode / GTIN.
-- Show a first readiness score.
+- Run deterministic scanner rule 1: missing barcode / GTIN.
+- Run deterministic scanner rule 2: missing vendor / brand.
+- Show a readiness score based on implemented active catalog checks.
 - Show scan status and last scanned timestamp.
 - Show imported product count.
 - Show imported variant count.
@@ -45,31 +46,37 @@ The dashboard can:
 
 ## Last confirmed scan result
 
-Confirmed in the Shopify development store on 2026-05-21:
+Confirmed in the Shopify development store on 2026-05-24 at approximately 16:44 local time:
 
 - Imported products: 17
 - Imported variants: 26
 - Active variants scanned: 24
 - Missing barcode / GTIN issues: 24
+- Missing vendor / brand issues: 0
 - Critical issues: 24
 - Affected products: 15
 - Affected variants: 24
-- Readiness score: 0 / 100
+- Readiness score: 38 / 100
 - More variants after debug limit: No
 
-The 0 / 100 score is expected for the current seed catalog because every active variant in the debug import is missing barcode / GTIN data.
+The 38 / 100 score is expected for the current seed catalog because every active variant in the debug import is missing barcode / GTIN data, while active products have vendor / brand values.
 
-## First scanner promise
+## Current scanner promise
 
-The first real scanner rule identifies active product variants with missing barcode / GTIN data.
+The current real scanner rules identify:
 
-The rule currently ignores draft and archived products for issue counting, but those products still appear in the imported debug table for visibility.
+1. Active product variants with missing barcode / GTIN data.
+2. Active products with missing vendor / brand data.
+
+The scanner currently ignores draft and archived products for issue counting, but those products still appear in the imported debug table for visibility.
 
 ## Next product milestone
 
-Add the next deterministic scanner rule: missing vendor / brand.
+Add the next deterministic scanner rule: missing product image.
 
-After that, add missing product image and improve issue detail UI with deterministic fix suggestions.
+The current dev store already shows at least one active product with a missing image, so the next scan should be able to validate this rule immediately.
+
+After that, improve issue detail UI with deterministic fix suggestions.
 
 ## Not building yet
 

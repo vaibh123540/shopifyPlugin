@@ -3,6 +3,7 @@ import {
   type ProductImportResult,
 } from "../shopify/product-import.server";
 import { findMissingBarcodeIssues } from "./rules/missing-barcode.server";
+import { findMissingVendorIssues } from "./rules/missing-vendor.server";
 import {
   getScannableProducts,
   type ProductIssue,
@@ -23,7 +24,10 @@ export async function runCatalogScan(
   } = {},
 ): Promise<CatalogScanResult> {
   const importResult = await fetchProductSnapshots(admin, options);
-  const issues = findMissingBarcodeIssues(importResult.products);
+  const issues = [
+    ...findMissingBarcodeIssues(importResult.products),
+    ...findMissingVendorIssues(importResult.products),
+  ];
   const summary = buildScanSummary(importResult, issues);
 
   return {
@@ -47,7 +51,9 @@ function buildScanSummary(
     issues.map((issue) => issue.productId),
   );
   const affectedVariantIds = new Set(
-    issues.map((issue) => issue.variantId),
+    issues
+      .map((issue) => issue.variantId)
+      .filter((variantId): variantId is string => Boolean(variantId)),
   );
 
   const criticalIssues = issues.filter(
@@ -60,17 +66,21 @@ function buildScanSummary(
   const missingBarcodeIssues = issues.filter(
     (issue) => issue.ruleId === "missing_barcode_gtin",
   ).length;
+  const missingVendorIssues = issues.filter(
+    (issue) => issue.ruleId === "missing_vendor_brand",
+  ).length;
 
   return {
     readinessScore: calculateReadinessScore({
-      issueCount: missingBarcodeIssues,
-      scannedVariants,
+      failedChecks: missingBarcodeIssues + missingVendorIssues,
+      totalChecks: scannedVariants + scannableProducts.length,
     }),
     totalIssues: issues.length,
     criticalIssues,
     warningIssues,
     infoIssues,
     missingBarcodeIssues,
+    missingVendorIssues,
     affectedProducts: affectedProductIds.size,
     affectedVariants: affectedVariantIds.size,
     scannedProducts: scannableProducts.length,
@@ -80,17 +90,17 @@ function buildScanSummary(
 }
 
 function calculateReadinessScore({
-  issueCount,
-  scannedVariants,
+  failedChecks,
+  totalChecks,
 }: {
-  issueCount: number;
-  scannedVariants: number;
+  failedChecks: number;
+  totalChecks: number;
 }): number {
-  if (scannedVariants === 0) {
+  if (totalChecks === 0) {
     return 0;
   }
 
-  const issueRatio = issueCount / scannedVariants;
+  const issueRatio = failedChecks / totalChecks;
 
   return Math.max(0, Math.min(100, Math.round(100 - issueRatio * 100)));
 }

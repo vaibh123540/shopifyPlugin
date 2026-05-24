@@ -2,9 +2,13 @@ import type { ProductSnapshot } from "../shopify/product-import.server";
 
 export type IssueSeverity = "critical" | "warning" | "info";
 
+export type IssueRuleId = "missing_barcode_gtin" | "missing_vendor_brand";
+
+export type IssueField = "barcode" | "vendor";
+
 export type ProductIssue = {
   id: string;
-  ruleId: "missing_barcode_gtin";
+  ruleId: IssueRuleId;
   severity: IssueSeverity;
   title: string;
   message: string;
@@ -12,9 +16,9 @@ export type ProductIssue = {
   productTitle: string;
   productHandle: string;
   productStatus: string;
-  variantId: string;
-  variantTitle: string;
-  field: "barcode";
+  variantId: string | null;
+  variantTitle: string | null;
+  field: IssueField;
   suggestedFix: string;
 };
 
@@ -25,6 +29,7 @@ export type ScanSummary = {
   warningIssues: number;
   infoIssues: number;
   missingBarcodeIssues: number;
+  missingVendorIssues: number;
   affectedProducts: number;
   affectedVariants: number;
   scannedProducts: number;

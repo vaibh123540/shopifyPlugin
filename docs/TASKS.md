@@ -27,18 +27,23 @@
 - [x] Calculate first basic readiness score
 - [x] Confirm Run Scan imports 17 products and 26 variants in the dev store
 - [x] Confirm Run Scan finds 24 missing barcode / GTIN issues in the dev store
+- [x] Implement missing vendor / brand scanner rule
+- [x] Support product-level scanner issues
+- [x] Display real issue summary count for missing vendor / brand
+- [x] Confirm Run Scan finds 0 missing vendor / brand issues in the dev store
+- [x] Confirm readiness score is 38 / 100 with barcode and vendor checks active
 
 ## Now
 
 - [ ] Run `npm run typecheck`
 - [ ] Fix any TypeScript or route errors from typecheck
+- [ ] Review `git status`
 - [ ] Review `git diff`
-- [ ] Commit Phase 4A missing barcode scanner checkpoint
+- [ ] Commit Phase 4B missing vendor scanner checkpoint
 - [ ] Push changes to GitHub
 
 ## Next
 
-- [ ] Add missing vendor / brand scanner rule
 - [ ] Add missing image scanner rule
 - [ ] Add issue detail UI with suggested deterministic fixes
 - [ ] Improve readiness score weighting across multiple rules

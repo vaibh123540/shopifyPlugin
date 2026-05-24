@@ -67,8 +67,8 @@ export const action = async ({
     const scanResult: CatalogScanResult = await runCatalogScan(admin, {
       maxVariants: 100,
     });
-    const issueVariantIds = new Set(
-      scanResult.issues.map((issue: ProductIssue) => issue.variantId),
+    const issueTitlesByProductAndVariant = buildIssueTitlesByProductAndVariant(
+      scanResult.issues,
     );
 
     return {
@@ -83,7 +83,7 @@ export const action = async ({
       maxVariants: scanResult.maxVariants,
       summary: scanResult.summary,
       issues: scanResult.issues,
-      debugRows: buildDebugRows(scanResult, issueVariantIds),
+      debugRows: buildDebugRows(scanResult, issueTitlesByProductAndVariant),
     };
   } catch (error) {
     const message =
@@ -151,9 +151,9 @@ export default function Index() {
             <s-stack direction="block" gap="small">
               <s-heading>Current phase</s-heading>
               <s-paragraph>
-                The first deterministic scanner rule is connected. Run scan now
-                imports Shopify variants and flags active variants with missing
-                barcode / GTIN data.
+                The first deterministic scanner rules are connected. Run scan now
+                imports Shopify variants and flags active products with missing
+                barcode / GTIN or vendor / brand data.
               </s-paragraph>
             </s-stack>
           </s-box>
@@ -171,9 +171,9 @@ export default function Index() {
             <s-stack direction="block" gap="small">
               <s-heading>{readinessScore}</s-heading>
               <s-paragraph>
-                This first score is based only on the missing barcode / GTIN
-                rule for active product variants. More checks will be added as
-                scanner rules are implemented.
+                This first score is based on active product checks for missing
+                barcode / GTIN and missing vendor / brand data. More weighting
+                will be added as scanner rules are implemented.
               </s-paragraph>
             </s-stack>
           </s-box>
@@ -272,6 +272,13 @@ export default function Index() {
 
             <s-box padding="base" borderWidth="base" borderRadius="base">
               <s-stack direction="block" gap="small">
+                <s-heading>{summary?.missingVendorIssues ?? 0}</s-heading>
+                <s-paragraph>Missing vendor / brand</s-paragraph>
+              </s-stack>
+            </s-box>
+
+            <s-box padding="base" borderWidth="base" borderRadius="base">
+              <s-stack direction="block" gap="small">
                 <s-heading>{summary?.criticalIssues ?? 0}</s-heading>
                 <s-paragraph>Critical issues</s-paragraph>
               </s-stack>
@@ -297,6 +304,7 @@ export default function Index() {
               <s-heading>Active scanner checks</s-heading>
               <s-unordered-list>
                 <s-list-item>Missing barcode / GTIN</s-list-item>
+                <s-list-item>Missing vendor / brand</s-list-item>
               </s-unordered-list>
             </s-stack>
           </s-box>
@@ -392,11 +400,16 @@ export default function Index() {
 
 function buildDebugRows(
   scanResult: ProductImportResult,
-  issueVariantIds: Set<string>,
+  issueTitlesByProductAndVariant: Map<string, string[]>,
 ): ProductDebugRow[] {
   return scanResult.products.flatMap((product: ProductSnapshot) =>
-    product.variants.map(
-      (variant: ProductVariantSnapshot): ProductDebugRow => ({
+    product.variants.map((variant: ProductVariantSnapshot): ProductDebugRow => {
+      const issueTitles = [
+        ...(issueTitlesByProductAndVariant.get(product.id) ?? []),
+        ...(issueTitlesByProductAndVariant.get(variant.id) ?? []),
+      ];
+
+      return {
         productId: product.id,
         productTitle: product.title,
         productHandle: product.handle,
@@ -408,10 +421,26 @@ function buildDebugRows(
         variantSku: variant.sku,
         variantBarcode: variant.barcode,
         variantPrice: variant.price,
-        issueTitle: issueVariantIds.has(variant.id) ? "Missing barcode / GTIN" : null,
-      }),
-    ),
+        issueTitle: issueTitles.length > 0 ? issueTitles.join(", ") : null,
+      };
+    }),
   );
+}
+
+function buildIssueTitlesByProductAndVariant(
+  issues: ProductIssue[],
+): Map<string, string[]> {
+  const issueTitlesByProductAndVariant = new Map<string, string[]>();
+
+  for (const issue of issues) {
+    const key = issue.variantId ?? issue.productId;
+    const issueTitles = issueTitlesByProductAndVariant.get(key) ?? [];
+
+    issueTitles.push(issue.title);
+    issueTitlesByProductAndVariant.set(key, issueTitles);
+  }
+
+  return issueTitlesByProductAndVariant;
 }
 
 function getScanStatusHeading(scanResult: ScanActionResponse | undefined) {

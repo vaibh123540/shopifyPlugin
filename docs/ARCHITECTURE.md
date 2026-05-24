@@ -41,6 +41,7 @@ Scanner files:
 - `app/lib/scanner/types.ts`
 - `app/lib/scanner/run-scan.server.ts`
 - `app/lib/scanner/rules/missing-barcode.server.ts`
+- `app/lib/scanner/rules/missing-vendor.server.ts`
 
 ## Main flow
 
@@ -64,7 +65,8 @@ Scanner files:
 5. The app fetches up to 100 product variants from Shopify Admin GraphQL API.
 6. The importer groups variants into product snapshots.
 7. The scanner runs the missing barcode / GTIN rule.
-8. The dashboard shows imported product count, imported variant count, active variants scanned, issue summary, readiness score, and a debug table.
+8. The scanner runs the missing vendor / brand rule.
+9. The dashboard shows imported product count, imported variant count, active variants scanned, issue summary, readiness score, and a debug table.
 
 ## Shopify access scopes
 
@@ -130,7 +132,7 @@ export type ProductVariantSnapshot = {
 };
 ```
 
-The exact source of truth is `app/lib/shopify/product-import.server.ts`.
+The exact source of truth is `app/lib/shopify/product-import.server.ts` and `app/lib/scanner/types.ts`.
 
 ## Scanner implementation
 
@@ -139,15 +141,24 @@ Scanner rules should remain deterministic first.
 Current scanner behavior:
 
 - Runs missing barcode / GTIN rule.
+- Runs missing vendor / brand rule.
 - Flags active variants with missing barcode / GTIN.
+- Flags active products with missing vendor / brand.
 - Skips draft and archived products from issue counts.
 - Still imports draft and archived products for dashboard debug visibility.
 - Produces issue severity values.
-- Calculates a simple readiness score based on active variants scanned versus active variant issues.
+- Calculates a simple readiness score using active checks from implemented rules.
 
-Current first rule:
+Current rules:
+
+### Missing barcode / GTIN
 
 - If an active variant barcode is empty or missing, create a critical issue for that product variant.
+
+### Missing vendor / brand
+
+- If an active product vendor field is empty or missing, create a warning issue for that product.
+- This is a product-level issue, not a variant-level issue.
 
 ## Current debug limits
 
