@@ -43,6 +43,7 @@ Scanner files:
 - `app/lib/scanner/rules/missing-barcode.server.ts`
 - `app/lib/scanner/rules/missing-vendor.server.ts`
 - `app/lib/scanner/rules/missing-image.server.ts`
+- `app/lib/scanner/rules/short-title.server.ts`
 
 ## Main flow
 
@@ -54,7 +55,7 @@ Scanner files:
 6. Product variant records are normalized into product snapshots.
 7. Scanner runs deterministic rules against product snapshots.
 8. Issues are returned to the dashboard.
-9. Dashboard displays score, issue categories, affected products, affected variants, and a debug table.
+9. Dashboard displays score, issue categories, affected products, affected variants, deterministic fixes, and a debug table.
 10. Paid users can export CSV and unlock full report later.
 
 ## Current implemented flow
@@ -65,10 +66,12 @@ Scanner files:
 4. The action authenticates the admin request.
 5. The app fetches up to 100 product variants from Shopify Admin GraphQL API.
 6. The importer groups variants into product snapshots.
-7. The scanner runs the missing barcode / GTIN rule.
-8. The scanner runs the missing vendor / brand rule.
-9. The scanner runs the missing product image rule.
-10. The dashboard shows imported product count, imported variant count, active variants scanned, issue summary, readiness score, and a debug table.
+7. The scanner runs four deterministic rules:
+   - Missing barcode / GTIN
+   - Missing vendor / brand
+   - Missing product image
+   - Short product title
+8. The dashboard shows imported product count, imported variant count, active variants scanned, issue summary, readiness score, fix checklist, and a debug table.
 
 ## Shopify access scopes
 
@@ -88,7 +91,7 @@ The first import path uses Shopify Admin GraphQL `productVariants` rather than q
 
 Reason:
 
-- The first scanner rule is variant-level missing barcode / GTIN.
+- The first scanner rule was variant-level missing barcode / GTIN.
 - Querying variants gives direct access to barcode, SKU, price, and associated product data.
 - Product snapshots can be built by grouping variants by parent product.
 
@@ -134,7 +137,7 @@ export type ProductVariantSnapshot = {
 };
 ```
 
-The exact source of truth is `app/lib/shopify/product-import.server.ts` and `app/lib/scanner/types.ts`.
+The exact source of truth is `app/lib/shopify/product-import.server.ts`.
 
 ## Scanner implementation
 
@@ -145,30 +148,51 @@ Current scanner behavior:
 - Runs missing barcode / GTIN rule.
 - Runs missing vendor / brand rule.
 - Runs missing product image rule.
+- Runs short product title rule.
 - Flags active variants with missing barcode / GTIN.
 - Flags active products with missing vendor / brand.
 - Flags active products with missing featured image.
+- Flags active products with titles shorter than the current threshold.
 - Skips draft and archived products from issue counts.
 - Still imports draft and archived products for dashboard debug visibility.
 - Produces issue severity values.
-- Calculates a simple readiness score using active checks from implemented rules.
+- Calculates a readiness score using active variant and active product checks.
 
-Current rules:
+## Current rules
 
 ### Missing barcode / GTIN
 
+- Variant-level rule.
 - If an active variant barcode is empty or missing, create a critical issue for that product variant.
-- This is a variant-level issue.
 
 ### Missing vendor / brand
 
+- Product-level rule.
 - If an active product vendor field is empty or missing, create a warning issue for that product.
-- This is a product-level issue.
 
 ### Missing product image
 
-- If an active product featured image URL is empty or missing, create a critical issue for that product.
-- This is a product-level issue.
+- Product-level rule.
+- If an active product has no featured image URL, create a critical issue for that product.
+
+### Short product title
+
+- Product-level rule.
+- If an active product title is shorter than 20 characters, create a warning issue for that product.
+- Current confirmed example: `Gift Card`.
+
+## Fix checklist implementation
+
+The dashboard now groups scanner issues by issue type and shows deterministic suggested fixes.
+
+Current checklist supports:
+
+- Missing barcode / GTIN
+- Missing vendor / brand
+- Missing product image
+- Short product title
+
+Only issue groups with at least one current issue appear in the checklist.
 
 ## Current debug limits
 

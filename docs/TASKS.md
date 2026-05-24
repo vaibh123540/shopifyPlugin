@@ -28,39 +28,36 @@
 - [x] Confirm Run Scan imports 17 products and 26 variants in the dev store
 - [x] Confirm Run Scan finds 24 missing barcode / GTIN issues in the dev store
 - [x] Implement missing vendor / brand scanner rule
-- [x] Support product-level scanner issues
-- [x] Display real issue summary count for missing vendor / brand
-- [x] Confirm Run Scan finds 0 missing vendor / brand issues in the dev store
-- [x] Confirm readiness score is 38 / 100 with barcode and vendor checks active
+- [x] Confirm missing vendor / brand returns 0 issues in the dev store
 - [x] Implement missing product image scanner rule
-- [x] Display real issue summary count for missing product image
-- [x] Confirm Run Scan finds 1 missing product image issue in the dev store
-- [x] Confirm total issues increased to 25 after adding image check
-- [x] Confirm readiness score is 54 / 100 with barcode, vendor, and image checks active
+- [x] Confirm missing product image finds 1 issue in the dev store
+- [x] Add fix checklist UI with deterministic suggested fixes
+- [x] Implement short product title scanner rule
+- [x] Confirm short product title finds 1 warning issue in the dev store
+- [x] Confirm readiness score is 62 / 100 after short title rule
 
 ## Now
 
 - [ ] Run `npm run typecheck`
 - [ ] Fix any TypeScript or route errors from typecheck
-- [ ] Review `git status`
 - [ ] Review `git diff`
-- [ ] Commit Phase 4C missing image scanner checkpoint
+- [ ] Commit short title scanner checkpoint
 - [ ] Push changes to GitHub
 
 ## Next
 
-- [ ] Add issue detail UI with suggested deterministic fixes
-- [ ] Improve readiness score weighting across multiple rules
-- [ ] Add short title scanner rule
 - [ ] Add short description scanner rule
+- [ ] Add duplicate title scanner rule
+- [ ] Add missing Google product category rule
+- [ ] Improve readiness score weighting across multiple rules
+- [ ] Improve issue detail UI and filtering
 
 ## Later
 
-- [ ] Duplicate title scanner rule
-- [ ] Missing Google product category rule
 - [ ] Empty states
 - [ ] Loading states
 - [ ] Error states
+- [ ] Product-level issue drilldown
 - [ ] CSV export
 - [ ] Shopify Billing
 - [ ] AI rewrite suggestions

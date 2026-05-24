@@ -15,15 +15,18 @@ MerchantFix is a Shopify embedded app that scans product catalogs for Google Sho
 - Use TypeScript.
 - Keep database migrations explicit.
 - Update docs when architecture, product status, or major decisions change.
-- Keep the app focused on the current MVP flow: import products/variants -> run scanner rules -> show issues.
+- Keep the app focused on the current MVP flow: import products/variants -> run scanner rules -> show issues -> show deterministic fix checklist.
 
 ## Current working checkpoint
 
-The embedded dashboard can import product variants from Shopify Admin GraphQL API and run three deterministic scanner rules:
+The embedded dashboard can import product variants from Shopify Admin GraphQL API and run these deterministic scanner rules:
 
-1. Missing barcode / GTIN.
-2. Missing vendor / brand.
-3. Missing product image.
+- Missing barcode / GTIN
+- Missing vendor / brand
+- Missing product image
+- Short product title
+
+The dashboard also shows a deterministic fix checklist with affected examples.
 
 Current key files:
 
@@ -35,6 +38,7 @@ Current key files:
 - `app/lib/scanner/rules/missing-barcode.server.ts`
 - `app/lib/scanner/rules/missing-vendor.server.ts`
 - `app/lib/scanner/rules/missing-image.server.ts`
+- `app/lib/scanner/rules/short-title.server.ts`
 
 ## Before coding
 
@@ -46,13 +50,11 @@ Read:
 - `docs/STATUS.md`
 - `docs/DECISIONS.md`
 - `docs/AI_HANDOFF.md`
-- `TASKS.md`
+- `docs/TASKS.md`
 
 ## Current next task
 
-Commit and push the missing image scanner checkpoint.
-
-Then add issue detail UI with deterministic suggested fixes.
+After committing the short title scanner checkpoint, add the short description scanner rule.
 
 Do not start:
 
@@ -71,7 +73,7 @@ Update:
 
 - `docs/STATUS.md`
 - `docs/ROADMAP.md`
-- `TASKS.md`
+- `docs/TASKS.md`
 - `docs/AI_HANDOFF.md`
 - `docs/DECISIONS.md` if a major decision was made
 - `docs/UPDATE_SUMMARY.md` after meaningful checkpoints

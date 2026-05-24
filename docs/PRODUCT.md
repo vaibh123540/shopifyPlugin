@@ -22,6 +22,7 @@ Shopify merchants running Google Shopping, Performance Max, or free product list
 - Show store readiness score
 - Show issue list by severity
 - Show affected products
+- Show deterministic fix checklist
 - Export CSV
 - Paid unlock through Shopify Billing
 
@@ -34,53 +35,82 @@ The dashboard can:
 - Run a real catalog scan from the embedded app UI.
 - Import product and variant data from Shopify Admin GraphQL API.
 - Group imported variants into product snapshots.
-- Run deterministic scanner rule 1: missing barcode / GTIN.
-- Run deterministic scanner rule 2: missing vendor / brand.
-- Run deterministic scanner rule 3: missing product image.
-- Show a readiness score based on implemented active catalog checks.
+- Run deterministic scanner rules.
+- Show a readiness score.
 - Show scan status and last scanned timestamp.
 - Show imported product count.
 - Show imported variant count.
 - Show active variants scanned.
 - Show issue summary counts.
 - Show active scanner checks.
+- Show a deterministic fix checklist with affected examples.
 - Show a product variant debug table with issue status.
+
+## Current scanner rules
+
+Implemented:
+
+- Missing barcode / GTIN
+- Missing vendor / brand
+- Missing product image
+- Short product title
+
+Not implemented yet:
+
+- Short description
+- Duplicate title
+- Missing Google product category
 
 ## Last confirmed scan result
 
-Confirmed in the Shopify development store on 2026-05-24 at approximately 16:53 local time:
+Confirmed in the Shopify development store on 2026-05-24 17:17:39 local time:
 
 - Scan status: Scan complete
 - Imported products: 17
 - Imported variants: 26
 - Active variants scanned: 24
+- More variants after debug limit: No
 - Missing barcode / GTIN issues: 24
 - Missing vendor / brand issues: 0
 - Missing product image issues: 1
-- Total issues: 25
+- Short product title issues: 1
+- Total issues: 26
 - Critical issues: 25
+- Warning issues: 1
 - Affected products: 15
 - Affected variants: 24
-- Readiness score: 54 / 100
-- More variants after debug limit: No
+- Readiness score: 62 / 100
 
-The `54 / 100` score is expected for the current seed catalog because every active variant in the debug import is missing barcode / GTIN data, active products have vendor / brand data, and one active product is missing a product image.
+The current result is expected:
 
-## Current scanner promise
+- Active variants are missing barcode / GTIN values.
+- All active products currently have vendor / brand values.
+- `The Minimal Snowboard` is missing a product image.
+- `Gift Card` is shorter than the current short-title threshold.
 
-The current scanner identifies active products or variants with:
+## First scanner promise
 
-1. Missing barcode / GTIN data.
-2. Missing vendor / brand data.
-3. Missing product image data.
+The first scanner promise is to identify active products and variants with catalog data problems that may affect Google Shopping readiness.
 
 The scanner currently ignores draft and archived products for issue counting, but those products still appear in the imported debug table for visibility.
 
+## Current report promise
+
+The dashboard now includes a rule-based fix checklist.
+
+The checklist tells the merchant:
+
+- What issue exists.
+- How many affected products or variants exist.
+- Whether the issue is critical or warning-level.
+- What deterministic fix to apply.
+- First affected examples.
+
 ## Next product milestone
 
-Add issue detail UI with deterministic suggested fixes.
+Add the next deterministic scanner rule: short description.
 
-After that, improve readiness score weighting and continue with short title / short description scanner rules.
+After that, add duplicate title and missing Google product category checks, then improve report filtering and issue detail UI.
 
 ## Not building yet
 

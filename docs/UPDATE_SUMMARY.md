@@ -6,15 +6,9 @@
 
 ## What changed
 
-MerchantFix has moved from a two-rule deterministic scanner checkpoint into a three-rule scanner checkpoint.
+MerchantFix has moved from product import + first scanner rule into a broader deterministic scanner checkpoint.
 
-The dashboard now imports real Shopify product/variant data and flags:
-
-1. Active variants missing barcode / GTIN data.
-2. Active products missing vendor / brand data.
-3. Active products missing product image data.
-
-The latest scan found one missing product image issue: `The Minimal Snowboard`.
+The dashboard now imports real Shopify product/variant data, runs four scanner rules, displays issue counts, calculates a readiness score, and shows a deterministic fix checklist.
 
 ## Confirmed progress
 
@@ -24,50 +18,58 @@ The latest scan found one missing product image issue: `The Minimal Snowboard`.
 - Starter Shopify app template screen was replaced with a MerchantFix dashboard shell.
 - Run Scan imports real Shopify product variants through Shopify Admin GraphQL API.
 - Imported variants are grouped into product snapshots.
-- The dashboard displays imported products, imported variants, active variants scanned, and debug table data.
-- The missing barcode / GTIN scanner rule is implemented.
-- The missing vendor / brand scanner rule is implemented.
-- The missing product image scanner rule is implemented.
-- The dashboard displays real issue counts for all three implemented rules.
-- The dashboard displays a readiness score based on implemented active catalog checks.
+- Missing barcode / GTIN scanner rule is implemented.
+- Missing vendor / brand scanner rule is implemented.
+- Missing product image scanner rule is implemented.
+- Short product title scanner rule is implemented.
+- Dashboard displays imported products, imported variants, active variants scanned, and debug table data.
+- Dashboard displays real issue counts.
+- Dashboard displays a readiness score.
+- Dashboard displays active scanner checks.
+- Dashboard displays a fix checklist with deterministic suggested fixes.
 - Draft and archived products are imported for visibility but skipped from issue counts.
-- The debug table can show multiple issues on the same product/variant row.
 
 ## Last confirmed scan result
 
-Confirmed in the Shopify development store on 2026-05-24:
+Confirmed in the Shopify development store on 2026-05-24 17:17:39 local time:
 
 - Scan status: Scan complete
 - Imported products: 17
 - Imported variants: 26
 - Active variants scanned: 24
+- More variants after debug limit: No
 - Missing barcode / GTIN issues: 24
 - Missing vendor / brand issues: 0
 - Missing product image issues: 1
-- Total issues: 25
+- Short product title issues: 1
+- Total issues: 26
 - Critical issues: 25
+- Warning issues: 1
 - Affected products: 15
 - Affected variants: 24
-- Readiness score: 54 / 100
-- More variants after debug limit: No
+- Readiness score: 62 / 100
 
-## Interpretation
+## Most recent checkpoint
 
-The missing product image rule is working as expected:
+The short product title rule is working.
 
-- The issue summary shows `1` missing product image issue.
-- The debug table shows `The Minimal Snowboard` as active with `Image: Missing`.
-- The same product already has a missing barcode / GTIN issue, so the total issue count increased from 24 to 25 while affected products stayed at 15.
-- The missing vendor / brand issue count remains `0` because active products in the current dev store all have vendor values.
+Confirmed behavior:
+
+- `Gift Card` is flagged as a warning-level short product title issue.
+- The fix checklist shows a short product title group.
+- The debug table shows `Short product title` on all Gift Card variants because the product-level issue is associated with that product.
+- Total issue count increased from 25 to 26.
+- Critical issue count stayed at 25.
+- Warning issue count is now 1.
+- Readiness score is now 62 / 100.
 
 ## Next checkpoint
 
 Before pushing:
 
 1. Run `npm run typecheck`.
-2. Review `git status`.
-3. Review `git diff`.
-4. Commit the missing image scanner checkpoint.
-5. Push to GitHub.
+2. Review `git diff`.
+3. Commit the short title scanner checkpoint.
+4. Push to GitHub.
 
-After pushing, continue with issue detail UI and deterministic suggested fixes.
+After pushing, continue with the next deterministic scanner rule: short description.

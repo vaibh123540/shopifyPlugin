@@ -34,6 +34,24 @@ type ProductDebugRow = {
   issueTitle: string | null;
 };
 
+type IssueExample = {
+  id: string;
+  productTitle: string;
+  productHandle: string;
+  variantTitle: string | null;
+};
+
+type IssueGroup = {
+  ruleId: ProductIssue["ruleId"];
+  title: string;
+  severity: ProductIssue["severity"];
+  issueCount: number;
+  affectedProductCount: number;
+  affectedVariantCount: number;
+  suggestedFix: string;
+  examples: IssueExample[];
+};
+
 type ScanActionResponse =
   | {
       status: "success";
@@ -115,6 +133,9 @@ export default function Index() {
   const productRows: ProductDebugRow[] =
     scanResult?.status === "success" ? scanResult.debugRows : [];
 
+  const issueGroups: IssueGroup[] =
+    scanResult?.status === "success" ? buildIssueGroups(scanResult.issues) : [];
+
   const summary: ScanSummary | null =
     scanResult?.status === "success" ? scanResult.summary : null;
   const readinessScore = summary
@@ -153,7 +174,8 @@ export default function Index() {
               <s-paragraph>
                 The first deterministic scanner rules are connected. Run scan now
                 imports Shopify variants and flags active products with missing
-                barcode / GTIN, vendor / brand, or product image data.
+                barcode / GTIN, vendor / brand, product image, or short title
+                data.
               </s-paragraph>
             </s-stack>
           </s-box>
@@ -172,8 +194,8 @@ export default function Index() {
               <s-heading>{readinessScore}</s-heading>
               <s-paragraph>
                 This first score is based on active product checks for missing
-                barcode / GTIN, missing vendor / brand, and missing product
-                image data. More weighting will be added as scanner rules are
+                barcode / GTIN, missing vendor / brand, missing product
+                image data, and short product titles. More weighting will be added as scanner rules are
                 implemented.
               </s-paragraph>
             </s-stack>
@@ -287,6 +309,13 @@ export default function Index() {
 
             <s-box padding="base" borderWidth="base" borderRadius="base">
               <s-stack direction="block" gap="small">
+                <s-heading>{summary?.shortTitleIssues ?? 0}</s-heading>
+                <s-paragraph>Short product title</s-paragraph>
+              </s-stack>
+            </s-box>
+
+            <s-box padding="base" borderWidth="base" borderRadius="base">
+              <s-stack direction="block" gap="small">
                 <s-heading>{summary?.criticalIssues ?? 0}</s-heading>
                 <s-paragraph>Critical issues</s-paragraph>
               </s-stack>
@@ -314,9 +343,71 @@ export default function Index() {
                 <s-list-item>Missing barcode / GTIN</s-list-item>
                 <s-list-item>Missing vendor / brand</s-list-item>
                 <s-list-item>Missing product image</s-list-item>
+                <s-list-item>Short product title</s-list-item>
               </s-unordered-list>
             </s-stack>
           </s-box>
+        </s-stack>
+      </s-section>
+
+      <s-section heading="Fix checklist">
+        <s-stack direction="block" gap="base">
+          <s-box padding="base" borderWidth="base" borderRadius="base">
+            <s-paragraph>
+              Each checklist item uses deterministic scanner output. These are
+              not AI suggestions yet; they are rule-based fixes tied to the
+              current Shopify catalog scan.
+            </s-paragraph>
+          </s-box>
+
+          {scanResult?.status === "success" && issueGroups.length > 0 ? (
+            issueGroups.map((group) => (
+              <s-box
+                key={group.ruleId}
+                padding="base"
+                borderWidth="base"
+                borderRadius="base"
+              >
+                <s-stack direction="block" gap="small">
+                  <s-heading>{group.title}</s-heading>
+                  <s-paragraph>{formatIssueGroupMeta(group)}</s-paragraph>
+                  <s-paragraph>
+                    <strong>Suggested fix:</strong> {group.suggestedFix}
+                  </s-paragraph>
+
+                  <s-heading>Affected examples</s-heading>
+                  <s-unordered-list>
+                    {group.examples.map((example) => (
+                      <s-list-item key={example.id}>
+                        {formatIssueExample(example)}
+                      </s-list-item>
+                    ))}
+                  </s-unordered-list>
+
+                  {group.issueCount > group.examples.length && (
+                    <s-paragraph>
+                      Showing first {group.examples.length} of {group.issueCount}{" "}
+                      issue(s) for this check.
+                    </s-paragraph>
+                  )}
+                </s-stack>
+              </s-box>
+            ))
+          ) : scanResult?.status === "success" ? (
+            <s-box padding="base" borderWidth="base" borderRadius="base">
+              <s-paragraph>
+                No issues found in the current debug scan. Add more scanner
+                rules to broaden coverage.
+              </s-paragraph>
+            </s-box>
+          ) : (
+            <s-box padding="base" borderWidth="base" borderRadius="base">
+              <s-paragraph>
+                Run a scan to generate a rule-based fix checklist for the
+                imported catalog.
+              </s-paragraph>
+            </s-box>
+          )}
         </s-stack>
       </s-section>
 
@@ -397,8 +488,8 @@ export default function Index() {
 
       <s-section slot="aside" heading="Next build steps">
         <s-unordered-list>
-          <s-list-item>Add missing product image scanner rule</s-list-item>
-          <s-list-item>Add issue detail UI with deterministic fixes</s-list-item>
+          <s-list-item>Add short description scanner rule</s-list-item>
+          <s-list-item>Add duplicate title scanner rule</s-list-item>
           <s-list-item>Improve readiness score weighting</s-list-item>
           <s-list-item>Add empty, loading, and error states</s-list-item>
         </s-unordered-list>
@@ -450,6 +541,76 @@ function buildIssueTitlesByProductAndVariant(
   }
 
   return issueTitlesByProductAndVariant;
+}
+
+function buildIssueGroups(issues: ProductIssue[]): IssueGroup[] {
+  const issuesByRuleId = new Map<ProductIssue["ruleId"], ProductIssue[]>();
+
+  for (const issue of issues) {
+    const groupIssues = issuesByRuleId.get(issue.ruleId) ?? [];
+
+    groupIssues.push(issue);
+    issuesByRuleId.set(issue.ruleId, groupIssues);
+  }
+
+  return Array.from(issuesByRuleId.entries()).map(([ruleId, groupIssues]) => {
+    const firstIssue = groupIssues[0];
+
+    if (!firstIssue) {
+      throw new Error(`Cannot build issue group for ${ruleId} without issues.`);
+    }
+
+    const affectedProductIds = new Set(
+      groupIssues.map((issue) => issue.productId),
+    );
+    const affectedVariantIds = new Set(
+      groupIssues
+        .map((issue) => issue.variantId)
+        .filter((variantId): variantId is string => Boolean(variantId)),
+    );
+
+    return {
+      ruleId,
+      title: firstIssue.title,
+      severity: firstIssue.severity,
+      issueCount: groupIssues.length,
+      affectedProductCount: affectedProductIds.size,
+      affectedVariantCount: affectedVariantIds.size,
+      suggestedFix: firstIssue.suggestedFix,
+      examples: groupIssues.slice(0, 5).map(
+        (issue): IssueExample => ({
+          id: issue.id,
+          productTitle: issue.productTitle,
+          productHandle: issue.productHandle,
+          variantTitle: issue.variantTitle,
+        }),
+      ),
+    };
+  });
+}
+
+function formatIssueGroupMeta(group: IssueGroup): string {
+  const parts = [
+    `${group.issueCount} issue(s)`,
+    `${group.severity} severity`,
+    `${group.affectedProductCount} affected product(s)`,
+  ];
+
+  if (group.affectedVariantCount > 0) {
+    parts.push(`${group.affectedVariantCount} affected variant(s)`);
+  }
+
+  return parts.join(" • ");
+}
+
+function formatIssueExample(example: IssueExample): string {
+  const productLabel = `${example.productTitle} (${example.productHandle})`;
+
+  if (!example.variantTitle) {
+    return productLabel;
+  }
+
+  return `${productLabel} — ${example.variantTitle}`;
 }
 
 function getScanStatusHeading(scanResult: ScanActionResponse | undefined) {

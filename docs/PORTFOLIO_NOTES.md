@@ -1,46 +1,40 @@
 # Portfolio Notes
 
-## Portfolio direction
+MerchantFix is the flagship product in the current 3-product portfolio.
 
-The portfolio remains:
-
-1. Shopify Merchant Center Fixer / MerchantFix.
-2. Discord Paid Role Drift Auditor.
-3. Roblox Economy / Quest Balancer.
-
-MerchantFix is the flagship product and remains the current build focus.
-
-## Priority
+## Portfolio
 
 | Priority | Niche | Product | Customer | Pain | Monetization |
 | ---: | --- | --- | --- | --- | --- |
-| 1 | Shopify | MerchantFix / Google Merchant Center Fixer | Shopify merchants | Products disapproved or not showing on Google | $29-$99/mo |
+| 1 | Shopify | Google Merchant Center Fixer / MerchantFix | Shopify merchants | Products disapproved or not showing on Google | $29-$99/mo |
 | 2 | Discord | Paid Role Drift Auditor | Paid communities | Members lose access or keep roles after canceling | $19-$99/mo |
-| 3 | Roblox | Economy / Quest Balancer Plugin | Roblox devs | Hard to balance progression, rewards, quests | $19-$49 one-time + templates |
+| 3 | Roblox | Economy / Quest Balancer Plugin | Roblox devs | Hard to balance progression, rewards, quests | One-time + templates |
 
-## Shopify product wedge
+## Current priority
 
-MerchantFix should stay focused on this wedge:
+Shopify remains the main build.
 
-> Product-level feed issue scanner for Shopify stores with messy catalogs.
+Discord and Roblox remain later portfolio ideas. Do not start them until the Shopify scanner MVP has more complete scanner coverage and report UI.
 
-The MVP should not become a full feed manager.
-
-## Current Shopify implementation checkpoint
+## Shopify current checkpoint
 
 Updated on 2026-05-24.
 
-MerchantFix remains the flagship product in the portfolio.
+MerchantFix has progressed beyond the dashboard shell and initial product import. It now has:
 
-The Shopify app has progressed beyond the dashboard shell:
-
-- Embedded Shopify Admin dashboard is working.
-- Product and variant import is working through Shopify Admin GraphQL API.
-- Product variants are grouped into product snapshots.
-- The first deterministic scanner rule is working: missing barcode / GTIN.
-- The second deterministic scanner rule is working: missing vendor / brand.
-- The third deterministic scanner rule is working: missing product image.
-- The dashboard now shows a readiness score and real issue counts across implemented scanner rules.
+- Embedded Shopify Admin dashboard.
+- Real product and variant import through Shopify Admin GraphQL API.
+- Product snapshots grouped from imported variants.
+- Four deterministic scanner rules:
+  - Missing barcode / GTIN
+  - Missing vendor / brand
+  - Missing product image
+  - Short product title
+- Basic readiness score.
+- Issue summary cards.
+- Active scanner checks list.
+- Fix checklist with deterministic suggested fixes and affected examples.
+- Imported variant debug table.
 
 Last confirmed Shopify dev-store scan:
 
@@ -52,16 +46,22 @@ Last confirmed Shopify dev-store scan:
 | Missing barcode / GTIN issues | 24 |
 | Missing vendor / brand issues | 0 |
 | Missing product image issues | 1 |
-| Total issues | 25 |
+| Short product title issues | 1 |
+| Total issues | 26 |
 | Critical issues | 25 |
+| Warning issues | 1 |
 | Affected products | 15 |
 | Affected variants | 24 |
-| Readiness score | 54 / 100 |
+| Readiness score | 62 / 100 |
 
-This confirms the flagship Shopify idea has moved further into a working technical MVP path.
+This confirms the Shopify flagship has moved from concept into a working scanner MVP path with multiple deterministic rules and a merchant-facing fix checklist.
 
-Next Shopify build step:
+## Next Shopify build step
 
-> Add issue detail UI with deterministic suggested fixes.
+Add the next deterministic scanner rule:
 
-Discord and Roblox remain later portfolio ideas. Do not start them until the Shopify scanner MVP has more complete scanner coverage and report UI.
+> Short description rule.
+
+After that, continue with duplicate title and missing Google product category checks.
+
+Do not start Discord or Roblox until the Shopify MVP scanner and report UI are stronger.

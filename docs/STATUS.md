@@ -6,13 +6,9 @@
 
 ## Current focus
 
-Phase 3 product import is working, and Phase 4 now has three deterministic scanner rules connected:
+Phase 4 scanner work is progressing, and Phase 5 report UI has started.
 
-1. Missing barcode / GTIN.
-2. Missing vendor / brand.
-3. Missing product image.
-
-The latest confirmed state is successful. The embedded Shopify dashboard imports real products and variants, runs all three scanner rules, and displays real issue counts.
+The latest confirmed state is successful. The embedded Shopify dashboard imports real products and variants, runs four deterministic scanner rules, displays issue counts, calculates a readiness score, and shows a deterministic fix checklist.
 
 ## What works
 
@@ -32,16 +28,18 @@ The latest confirmed state is successful. The embedded Shopify dashboard imports
 - Missing barcode / GTIN scanner rule is implemented.
 - Missing vendor / brand scanner rule is implemented.
 - Missing product image scanner rule is implemented.
-- Product-level and variant-level scanner issues are supported.
-- Issue summary shows real counts for missing barcode / GTIN, missing vendor / brand, missing product image, critical issues, affected products, and affected variants.
-- A readiness score is calculated from the implemented active catalog checks.
+- Short product title scanner rule is implemented.
+- Issue summary shows real counts for implemented scanner rules.
+- A readiness score is calculated from implemented scanner checks.
 - Draft and archived products are imported for debug visibility but skipped from issue counting.
 - The debug table shows draft and archived products with no issue when skipped.
-- The debug table can show multiple issues for one product/variant row.
+- Fix checklist UI is implemented.
+- Fix checklist groups issues by rule and shows deterministic suggested fixes.
+- Fix checklist shows first affected examples for each issue group.
 
 ## Last confirmed scan result
 
-Confirmed in the Shopify development store on 2026-05-24 at approximately 16:53 local time:
+Confirmed in the Shopify development store on 2026-05-24 17:17:39 local time:
 
 - Scan status: Scan complete
 - Imported products: 17
@@ -51,28 +49,32 @@ Confirmed in the Shopify development store on 2026-05-24 at approximately 16:53 
 - Missing barcode / GTIN issues: 24
 - Missing vendor / brand issues: 0
 - Missing product image issues: 1
-- Total issues: 25
+- Short product title issues: 1
+- Total issues: 26
 - Critical issues: 25
+- Warning issues: 1
 - Affected products: 15
 - Affected variants: 24
-- Readiness score: 54 / 100
+- Readiness score: 62 / 100
 
-The scan result is expected for the current dev store data:
+The current result is expected because:
 
-- Every active variant imported in the debug scan is missing barcode / GTIN data.
-- Active products have vendor / brand data.
-- `The Minimal Snowboard` is active and missing a product image.
-- Draft and archived products appear in the debug table but do not count as scanner issues.
+- Active variants are missing barcode / GTIN values.
+- All active products have vendor / brand values.
+- `The Minimal Snowboard` is missing a product image.
+- `Gift Card` is shorter than the current short-title threshold.
 
 ## What is not implemented yet
 
-- Short title rule is not implemented yet.
 - Short description rule is not implemented yet.
 - Duplicate title rule is not implemented yet.
 - Missing Google product category rule is not implemented yet.
-- Suggested deterministic fixes are not implemented yet.
-- Dedicated issue detail UI is not implemented yet.
-- Readiness score weighting is still simple and should become more nuanced.
+- Empty states are not polished yet.
+- Loading states are not polished yet.
+- Error states are not polished yet.
+- Better issue grouping/filtering is not implemented yet.
+- Product-level issue drilldown is not implemented yet.
+- Readiness score weighting is still early and should be refined after more rules are implemented.
 - CSV export is not implemented yet.
 - Shopify Billing is not implemented yet.
 - AI rewrite suggestions are not implemented yet.
@@ -89,15 +91,15 @@ The scan result is expected for the current dev store data:
 
 ## Next 3 tasks
 
-1. Run `npm run typecheck` after applying the missing product image scanner changes.
-2. Review `git status` and `git diff`.
-3. Commit and push the missing image scanner checkpoint.
+1. Run `npm run typecheck`.
+2. Commit and push the current short title scanner checkpoint.
+3. Add the next deterministic scanner rule: short description.
 
 ## Suggested commit message
 
 ```bash
 git add .
-git commit -m "Add missing image scanner rule"
+git commit -m "Add short title scanner rule"
 git push
 ```
 
@@ -105,4 +107,4 @@ git push
 
 Do not start billing, AI features, storefront widgets, checkout extensions, or Google Merchant Center API integration yet.
 
-The next build step is improving the report UI: add issue detail sections with deterministic suggested fixes, then improve readiness score weighting across multiple rules.
+The next build step is expanding deterministic scanner rules. Start with short description, then duplicate title.

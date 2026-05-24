@@ -8,22 +8,16 @@ You are helping build MerchantFix, a Shopify embedded app that scans a merchant'
 - It is not a storefront extension.
 - It is not a checkout extension.
 - MVP is a diagnostic scanner, not a full feed manager.
-- Core flow: install app -> fetch products/variants -> run scanner rules -> show issues -> export report later.
+- Core flow: install app -> fetch products/variants -> run scanner rules -> show issues -> show deterministic fix checklist -> export report later.
 - Scanner logic should be deterministic.
 - AI is only used later for explanations and rewrite suggestions.
 - We are using TypeScript, React Router Shopify template, Shopify Admin GraphQL API, Prisma, and Shopify Billing later.
 
 ## Current phase
 
-Phase 3 product import is working.
+Phase 4 scanner work is progressing well and Phase 5 report UI has started.
 
-Phase 4 scanner work now has three deterministic scanner rules connected:
-
-1. Missing barcode / GTIN.
-2. Missing vendor / brand.
-3. Missing product image.
-
-The dashboard imports real Shopify product variants, groups them into product snapshots, runs the scanner rules, calculates a readiness score across the active catalog, and displays real issue counts.
+The dashboard now imports real Shopify product variants, groups them into product snapshots, runs four deterministic scanner rules, calculates a readiness score, and displays a rule-based fix checklist with affected examples.
 
 ## Current implementation
 
@@ -46,6 +40,7 @@ Scanner files:
 - `app/lib/scanner/rules/missing-barcode.server.ts`
 - `app/lib/scanner/rules/missing-vendor.server.ts`
 - `app/lib/scanner/rules/missing-image.server.ts`
+- `app/lib/scanner/rules/short-title.server.ts`
 
 Current dashboard includes:
 
@@ -53,11 +48,12 @@ Current dashboard includes:
 - Primary action: Run scan
 - Google Shopping readiness scanner intro
 - Current phase card
-- Readiness score based on active product checks for missing barcode / GTIN, missing vendor / brand, and missing product image
+- Readiness score using active variant and active product checks
 - Scan status card
 - Imported catalog debug cards
-- Real issue summary cards for missing barcode / GTIN, missing vendor / brand, and missing product image
+- Issue summary cards
 - Active scanner checks list
+- Fix checklist with deterministic suggested fixes
 - Imported product variant debug table with issue column
 - MVP scope sidebar
 - Next build steps sidebar
@@ -66,19 +62,22 @@ Current dashboard includes:
 
 - Imports up to 100 variants for the debug scan.
 - Groups variants into product snapshots.
-- Runs the missing barcode / GTIN rule.
-- Runs the missing vendor / brand rule.
-- Runs the missing product image rule.
 - Counts issues only for active products.
 - Imports draft and archived products for visibility, but skips them from issue counts.
-- Calculates a readiness score based on active product/variant checks currently implemented.
-- Marks active variants missing barcode / GTIN as critical issues.
-- Marks active products missing vendor / brand as warning issues.
-- Marks active products missing featured image as critical issues.
+- Runs missing barcode / GTIN rule at variant level.
+- Runs missing vendor / brand rule at product level.
+- Runs missing product image rule at product level.
+- Runs short product title rule at product level.
+- Short product title threshold is currently under 20 characters.
+- Missing barcode and missing image are critical issues.
+- Missing vendor / brand is a warning issue.
+- Short product title is a warning issue.
+- Calculates a readiness score using the implemented scanner checks.
+- Shows deterministic suggested fixes in a fix checklist.
 
 ## Last confirmed working scan
 
-Confirmed in the Shopify development store on 2026-05-24 at approximately 16:53 local time:
+Confirmed in the Shopify development store on 2026-05-24 17:17:39 local time:
 
 - Scan status: Scan complete
 - Imported products: 17
@@ -88,22 +87,26 @@ Confirmed in the Shopify development store on 2026-05-24 at approximately 16:53 
 - Missing barcode / GTIN issues: 24
 - Missing vendor / brand issues: 0
 - Missing product image issues: 1
-- Total issues: 25
+- Short product title issues: 1
+- Total issues: 26
 - Critical issues: 25
+- Warning issues: 1
 - Affected products: 15
 - Affected variants: 24
-- Readiness score: 54 / 100
+- Readiness score: 62 / 100
 
-This is considered successful because the current dev store's active variants are missing barcode / GTIN values, active products have vendor / brand values, and exactly one active product (`The Minimal Snowboard`) is missing a product image. Draft and archived products appeared in the debug table but were not counted as scanner issues.
+The current issue breakdown is expected because the dev store active variants are missing barcode / GTIN values, one active product is missing a featured image, and `Gift Card` is shorter than the current short-title threshold.
 
 ## Current known issues
 
-- Short title rule is not implemented yet.
 - Short description rule is not implemented yet.
 - Duplicate title rule is not implemented yet.
-- Missing product category rule is not implemented yet.
-- Suggested deterministic fixes are not implemented yet.
-- Readiness score weighting is still simple and should become more nuanced as more rules are added.
+- Missing Google product category rule is not implemented yet.
+- Suggested fixes exist in the checklist, but detailed filtering/drilldown is still basic.
+- Readiness score weighting is still early and should be refined after more rules are implemented.
+- Empty states are not polished yet.
+- Loading states are not polished yet.
+- Error states are not polished yet.
 - Shopify Billing is not implemented yet.
 - CSV export is not implemented yet.
 - AI suggestions are not implemented yet.
@@ -114,16 +117,16 @@ This is considered successful because the current dev store's active variants ar
 - If Shopify Admin shows `Example Domain` or a dead Cloudflare tunnel, open the app using the Preview URL printed by `shopify app dev` / `npm run dev`, or press `p` in the running Shopify CLI terminal.
 - The app needs `read_products` scope for product import.
 - The current debug import reads up to 100 variants.
-- `npm warn Unknown project config "shamefully-hoist"` has appeared and has not blocked development.
+- `npm warn Unknown project config "shamefully-hoist"` has appeared before and has not blocked development.
 
 ## Next task
 
-Run typecheck, review the diff, commit and push the missing image scanner checkpoint.
+Commit and push the current short title scanner checkpoint after running typecheck.
 
-Then start the next product/report step:
+Then start the next deterministic scanner rule:
 
-1. Add issue detail UI with deterministic suggested fixes.
-2. Improve readiness score weighting across multiple rules.
-3. Then continue with the next scanner rule, likely short title or short description.
+1. Short description rule.
+2. Duplicate title rule.
+3. Missing Google product category rule.
 
 Do not start billing, AI features, storefront widgets, checkout extensions, or Google Merchant Center API integration yet.
