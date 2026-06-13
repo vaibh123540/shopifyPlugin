@@ -7,7 +7,8 @@ export type IssueRuleId =
   | "missing_vendor_brand"
   | "missing_product_image"
   | "short_product_title"
-  | "short_product_description";
+  | "short_product_description"
+  | "duplicate_product_title";
 
 export type IssueField =
   | "barcode"
@@ -43,6 +44,7 @@ export type ScanSummary = {
   missingImageIssues: number;
   shortTitleIssues: number;
   shortDescriptionIssues: number;
+  duplicateTitleIssues: number;
   affectedProducts: number;
   affectedVariants: number;
   scannedProducts: number;

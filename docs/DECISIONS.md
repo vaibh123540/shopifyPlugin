@@ -74,9 +74,9 @@ Reason: Google Shopping readiness often depends on product identifiers. This rul
 
 ## Readiness score decision
 
-Decision: Start with a simple readiness score based only on active variant barcode / GTIN coverage.
+Decision: Start with a simple readiness score based on active variant and active product checks.
 
-Reason: A simple score was enough for the first scanner checkpoint. Score weighting should become more nuanced as more scanner rules are implemented.
+Reason: A simple score is enough during scanner validation. Score weighting should become more nuanced after the first scanner set is complete.
 
 ## Missing vendor / brand scanner decision
 
@@ -113,3 +113,27 @@ Reason: Title quality is an important product data quality signal and can be che
 Decision: Flag active product titles shorter than 20 characters as warning-level short title issues.
 
 Reason: Short titles are not always disqualifying, but they are often less useful for Google Shopping because they may lack product type, brand, model, size, color, or other distinguishing details. The initial threshold is intentionally simple and can be refined later.
+
+## Short product description scanner decision
+
+Decision: Implement short product description as the fifth deterministic scanner rule.
+
+Reason: Descriptions help merchants provide purchase-relevant product detail. A deterministic minimum-length check catches empty or very thin product descriptions before adding AI rewrite suggestions.
+
+## Short description threshold decision
+
+Decision: Flag active product descriptions shorter than 100 characters as warning-level short description issues.
+
+Reason: The threshold is intentionally simple for the MVP. It catches empty or thin descriptions while avoiding claims that a short description guarantees Google disapproval.
+
+## Duplicate product title scanner decision
+
+Decision: Implement duplicate product title as the sixth deterministic scanner rule.
+
+Reason: Duplicate product titles can make catalog review and merchant fixes harder, and they can reduce product listing clarity. This is a deterministic product-level check that fits the current scanner roadmap.
+
+## Duplicate title normalization decision
+
+Decision: Normalize titles by trimming, lowercasing, and collapsing repeated whitespace before checking duplicates.
+
+Reason: This catches obvious duplicate titles even if casing or spacing differs, while keeping the first version simple and explainable.

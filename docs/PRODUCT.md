@@ -23,8 +23,8 @@ Shopify merchants running Google Shopping, Performance Max, or free product list
 - Show issue list by severity
 - Show affected products
 - Show deterministic fix checklist
-- Export CSV
-- Paid unlock through Shopify Billing
+- Export CSV later
+- Paid unlock through Shopify Billing later
 
 ## Current product status
 
@@ -45,6 +45,7 @@ The dashboard can:
 - Show active scanner checks.
 - Show a deterministic fix checklist with affected examples.
 - Show a product variant debug table with issue status.
+- Show product description length in the debug table.
 
 ## Current scanner rules
 
@@ -54,16 +55,16 @@ Implemented:
 - Missing vendor / brand
 - Missing product image
 - Short product title
+- Short product description
+- Duplicate product title
 
 Not implemented yet:
 
-- Short description
-- Duplicate title
 - Missing Google product category
 
 ## Last confirmed scan result
 
-Confirmed in the Shopify development store on 2026-05-24 17:17:39 local time:
+Confirmed in the Shopify development store on 2026-06-13 11:00:54 local time:
 
 - Scan status: Scan complete
 - Imported products: 17
@@ -74,12 +75,14 @@ Confirmed in the Shopify development store on 2026-05-24 17:17:39 local time:
 - Missing vendor / brand issues: 0
 - Missing product image issues: 1
 - Short product title issues: 1
-- Total issues: 26
+- Short product description issues: 15
+- Duplicate product title issues: 0
+- Total issues: 41
 - Critical issues: 25
-- Warning issues: 1
+- Warning issues: 16
 - Affected products: 15
 - Affected variants: 24
-- Readiness score: 62 / 100
+- Readiness score: 59 / 100
 
 The current result is expected:
 
@@ -87,6 +90,8 @@ The current result is expected:
 - All active products currently have vendor / brand values.
 - `The Minimal Snowboard` is missing a product image.
 - `Gift Card` is shorter than the current short-title threshold.
+- 15 active products have descriptions shorter than the current short-description threshold.
+- No active products currently have duplicate normalized titles.
 
 ## First scanner promise
 
@@ -108,9 +113,9 @@ The checklist tells the merchant:
 
 ## Next product milestone
 
-Add the next deterministic scanner rule: short description.
+Add the next deterministic scanner rule: missing Google product category.
 
-After that, add duplicate title and missing Google product category checks, then improve report filtering and issue detail UI.
+After that, improve report filtering, issue detail UI, empty/loading/error states, and readiness score weighting.
 
 ## Not building yet
 

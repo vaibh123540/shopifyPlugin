@@ -176,7 +176,7 @@ export default function Index() {
                 The first deterministic scanner rules are connected. Run scan now
                 imports Shopify variants and flags active products with missing
                 barcode / GTIN, vendor / brand, product image, short title,
-                or short description data.
+                short description, or duplicate title data.
               </s-paragraph>
             </s-stack>
           </s-box>
@@ -196,8 +196,9 @@ export default function Index() {
               <s-paragraph>
                 This first score is based on active product checks for missing
                 barcode / GTIN, missing vendor / brand, missing product
-                image data, short product titles, and short product descriptions.
-                More weighting will be added as scanner rules are implemented.
+                image data, short product titles, short product descriptions,
+                and duplicate product titles. More weighting will be added as
+                scanner rules are implemented.
               </s-paragraph>
             </s-stack>
           </s-box>
@@ -324,6 +325,13 @@ export default function Index() {
 
             <s-box padding="base" borderWidth="base" borderRadius="base">
               <s-stack direction="block" gap="small">
+                <s-heading>{summary?.duplicateTitleIssues ?? 0}</s-heading>
+                <s-paragraph>Duplicate product title</s-paragraph>
+              </s-stack>
+            </s-box>
+
+            <s-box padding="base" borderWidth="base" borderRadius="base">
+              <s-stack direction="block" gap="small">
                 <s-heading>{summary?.criticalIssues ?? 0}</s-heading>
                 <s-paragraph>Critical issues</s-paragraph>
               </s-stack>
@@ -353,6 +361,7 @@ export default function Index() {
                 <s-list-item>Missing product image</s-list-item>
                 <s-list-item>Short product title</s-list-item>
                 <s-list-item>Short product description</s-list-item>
+                <s-list-item>Duplicate product title</s-list-item>
               </s-unordered-list>
             </s-stack>
           </s-box>
@@ -501,8 +510,8 @@ export default function Index() {
 
       <s-section slot="aside" heading="Next build steps">
         <s-unordered-list>
-          <s-list-item>Add duplicate title scanner rule</s-list-item>
           <s-list-item>Add missing Google product category rule</s-list-item>
+          <s-list-item>Improve duplicate title UI grouping</s-list-item>
           <s-list-item>Improve readiness score weighting</s-list-item>
           <s-list-item>Add empty, loading, and error states</s-list-item>
         </s-unordered-list>

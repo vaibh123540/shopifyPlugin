@@ -44,6 +44,8 @@ Scanner files:
 - `app/lib/scanner/rules/missing-vendor.server.ts`
 - `app/lib/scanner/rules/missing-image.server.ts`
 - `app/lib/scanner/rules/short-title.server.ts`
+- `app/lib/scanner/rules/short-description.server.ts`
+- `app/lib/scanner/rules/duplicate-title.server.ts`
 
 ## Main flow
 
@@ -66,11 +68,13 @@ Scanner files:
 4. The action authenticates the admin request.
 5. The app fetches up to 100 product variants from Shopify Admin GraphQL API.
 6. The importer groups variants into product snapshots.
-7. The scanner runs four deterministic rules:
+7. The scanner runs six deterministic rules:
    - Missing barcode / GTIN
    - Missing vendor / brand
    - Missing product image
    - Short product title
+   - Short product description
+   - Duplicate product title
 8. The dashboard shows imported product count, imported variant count, active variants scanned, issue summary, readiness score, fix checklist, and a debug table.
 
 ## Shopify access scopes
@@ -102,6 +106,7 @@ Current imported fields include:
 - Product handle
 - Product vendor / brand field
 - Product description
+- Product description HTML if available
 - Product status
 - Product featured image
 - Variant ID
@@ -149,10 +154,14 @@ Current scanner behavior:
 - Runs missing vendor / brand rule.
 - Runs missing product image rule.
 - Runs short product title rule.
+- Runs short product description rule.
+- Runs duplicate product title rule.
 - Flags active variants with missing barcode / GTIN.
 - Flags active products with missing vendor / brand.
 - Flags active products with missing featured image.
 - Flags active products with titles shorter than the current threshold.
+- Flags active products with descriptions shorter than the current threshold.
+- Flags active products whose normalized title appears on more than one active product.
 - Skips draft and archived products from issue counts.
 - Still imports draft and archived products for dashboard debug visibility.
 - Produces issue severity values.
@@ -181,9 +190,22 @@ Current scanner behavior:
 - If an active product title is shorter than 20 characters, create a warning issue for that product.
 - Current confirmed example: `Gift Card`.
 
+### Short product description
+
+- Product-level rule.
+- If an active product description is shorter than 100 characters, create a warning issue for that product.
+- Current confirmed count: 15 active products.
+
+### Duplicate product title
+
+- Product-level rule.
+- Normalize active product titles by trimming, lowercasing, and collapsing repeated whitespace.
+- If two or more active products share the same normalized title, create a warning issue for each affected product.
+- Current confirmed count: 0 active products.
+
 ## Fix checklist implementation
 
-The dashboard now groups scanner issues by issue type and shows deterministic suggested fixes.
+The dashboard groups scanner issues by issue type and shows deterministic suggested fixes.
 
 Current checklist supports:
 
@@ -191,6 +213,8 @@ Current checklist supports:
 - Missing vendor / brand
 - Missing product image
 - Short product title
+- Short product description
+- Duplicate product title
 
 Only issue groups with at least one current issue appear in the checklist.
 

@@ -37,10 +37,10 @@
 - [x] Missing vendor / brand rule
 - [x] Missing image rule
 - [x] Short title rule
-- [ ] Short description rule
-- [ ] Duplicate title rule
+- [x] Short description rule
+- [x] Duplicate title rule
 - [ ] Missing product category rule
-- [x] Basic readiness score calculation for first scanner rule
+- [x] Basic readiness score calculation for scanner rules
 - [x] Issue severity categories
 - [x] Product-level and variant-level scanner issues
 - [x] Skip draft and archived products from issue counts
@@ -51,9 +51,11 @@
 - [x] Real issue summary cards for missing vendor / brand
 - [x] Real issue summary cards for missing product image
 - [x] Real issue summary cards for short product title
+- [x] Real issue summary cards for short product description
+- [x] Real issue summary cards for duplicate product title
 - [x] Product issue table flags affected variants
 - [x] Scan status shows imported variants and issue count
-- [x] Debug table shows product, vendor, status, variant, SKU, barcode, issue, price, and image
+- [x] Debug table shows product, vendor, status, variant, description length, SKU, barcode, issue, price, and image
 - [x] Suggested deterministic fixes shown in dedicated fix checklist UI
 - [x] Fix checklist shows affected examples
 - [ ] Empty states

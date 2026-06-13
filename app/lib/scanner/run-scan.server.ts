@@ -2,6 +2,7 @@ import {
   fetchProductSnapshots,
   type ProductImportResult,
 } from "../shopify/product-import.server";
+import { findDuplicateTitleIssues } from "./rules/duplicate-title.server";
 import { findMissingBarcodeIssues } from "./rules/missing-barcode.server";
 import { findMissingImageIssues } from "./rules/missing-image.server";
 import { findMissingVendorIssues } from "./rules/missing-vendor.server";
@@ -33,6 +34,7 @@ export async function runCatalogScan(
     ...findMissingImageIssues(importResult.products),
     ...findShortTitleIssues(importResult.products),
     ...findShortDescriptionIssues(importResult.products),
+    ...findDuplicateTitleIssues(importResult.products),
   ];
   const summary = buildScanSummary(importResult, issues);
 
@@ -84,6 +86,9 @@ function buildScanSummary(
   const shortDescriptionIssues = issues.filter(
     (issue) => issue.ruleId === "short_product_description",
   ).length;
+  const duplicateTitleIssues = issues.filter(
+    (issue) => issue.ruleId === "duplicate_product_title",
+  ).length;
 
   return {
     readinessScore: calculateReadinessScore({
@@ -92,8 +97,9 @@ function buildScanSummary(
         missingVendorIssues +
         missingImageIssues +
         shortTitleIssues +
-        shortDescriptionIssues,
-      totalChecks: scannedVariants + scannableProducts.length * 4,
+        shortDescriptionIssues +
+        duplicateTitleIssues,
+      totalChecks: scannedVariants + scannableProducts.length * 5,
     }),
     totalIssues: issues.length,
     criticalIssues,
@@ -104,6 +110,7 @@ function buildScanSummary(
     missingImageIssues,
     shortTitleIssues,
     shortDescriptionIssues,
+    duplicateTitleIssues,
     affectedProducts: affectedProductIds.size,
     affectedVariants: affectedVariantIds.size,
     scannedProducts: scannableProducts.length,

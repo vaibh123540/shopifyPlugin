@@ -15,9 +15,9 @@ You are helping build MerchantFix, a Shopify embedded app that scans a merchant'
 
 ## Current phase
 
-Phase 4 scanner work is progressing well and Phase 5 report UI has started.
+Phase 4 scanner work is nearly complete for the first deterministic scanner set, and Phase 5 report UI has started.
 
-The dashboard now imports real Shopify product variants, groups them into product snapshots, runs four deterministic scanner rules, calculates a readiness score, and displays a rule-based fix checklist with affected examples.
+The dashboard now imports real Shopify product variants, groups them into product snapshots, runs six deterministic scanner rules, calculates a readiness score, and displays a rule-based fix checklist with affected examples.
 
 ## Current implementation
 
@@ -41,6 +41,8 @@ Scanner files:
 - `app/lib/scanner/rules/missing-vendor.server.ts`
 - `app/lib/scanner/rules/missing-image.server.ts`
 - `app/lib/scanner/rules/short-title.server.ts`
+- `app/lib/scanner/rules/short-description.server.ts`
+- `app/lib/scanner/rules/duplicate-title.server.ts`
 
 Current dashboard includes:
 
@@ -55,6 +57,7 @@ Current dashboard includes:
 - Active scanner checks list
 - Fix checklist with deterministic suggested fixes
 - Imported product variant debug table with issue column
+- Imported product variant debug table with description length column
 - MVP scope sidebar
 - Next build steps sidebar
 
@@ -68,16 +71,22 @@ Current dashboard includes:
 - Runs missing vendor / brand rule at product level.
 - Runs missing product image rule at product level.
 - Runs short product title rule at product level.
+- Runs short product description rule at product level.
+- Runs duplicate product title rule at product level.
 - Short product title threshold is currently under 20 characters.
+- Short product description threshold is currently under 100 characters.
+- Duplicate product title normalization trims, lowercases, and collapses repeated whitespace.
 - Missing barcode and missing image are critical issues.
 - Missing vendor / brand is a warning issue.
 - Short product title is a warning issue.
+- Short product description is a warning issue.
+- Duplicate product title is a warning issue.
 - Calculates a readiness score using the implemented scanner checks.
 - Shows deterministic suggested fixes in a fix checklist.
 
 ## Last confirmed working scan
 
-Confirmed in the Shopify development store on 2026-05-24 17:17:39 local time:
+Confirmed in the Shopify development store on 2026-06-13 11:00:54 local time:
 
 - Scan status: Scan complete
 - Imported products: 17
@@ -88,19 +97,19 @@ Confirmed in the Shopify development store on 2026-05-24 17:17:39 local time:
 - Missing vendor / brand issues: 0
 - Missing product image issues: 1
 - Short product title issues: 1
-- Total issues: 26
+- Short product description issues: 15
+- Duplicate product title issues: 0
+- Total issues: 41
 - Critical issues: 25
-- Warning issues: 1
+- Warning issues: 16
 - Affected products: 15
 - Affected variants: 24
-- Readiness score: 62 / 100
+- Readiness score: 59 / 100
 
-The current issue breakdown is expected because the dev store active variants are missing barcode / GTIN values, one active product is missing a featured image, and `Gift Card` is shorter than the current short-title threshold.
+The current issue breakdown is expected because the dev store active variants are missing barcode / GTIN values, one active product is missing a featured image, `Gift Card` is shorter than the short-title threshold, 15 active products have short descriptions, and no active product titles are duplicates.
 
 ## Current known issues
 
-- Short description rule is not implemented yet.
-- Duplicate title rule is not implemented yet.
 - Missing Google product category rule is not implemented yet.
 - Suggested fixes exist in the checklist, but detailed filtering/drilldown is still basic.
 - Readiness score weighting is still early and should be refined after more rules are implemented.
@@ -121,12 +130,12 @@ The current issue breakdown is expected because the dev store active variants ar
 
 ## Next task
 
-Commit and push the current short title scanner checkpoint after running typecheck.
+Commit and push the duplicate product title scanner checkpoint after running typecheck.
 
 Then start the next deterministic scanner rule:
 
-1. Short description rule.
-2. Duplicate title rule.
-3. Missing Google product category rule.
+1. Missing Google product category rule.
+2. Improve readiness score weighting.
+3. Improve report UI filtering and product-level issue drilldown.
 
-Do not start billing, AI features, storefront widgets, checkout extensions, or Google Merchant Center API integration yet.
+Do not start billing, AI features, storefront widgets, checkout extensions, CSV export, or Google Merchant Center API integration yet.
