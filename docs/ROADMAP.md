@@ -61,10 +61,15 @@
 - [x] Debug table shows product, vendor, status, variant, description length, category, SKU, barcode, issue, price, and image
 - [x] Suggested deterministic fixes shown in dedicated fix checklist UI
 - [x] Fix checklist shows affected examples
+- [x] Color-coded store health state
+- [x] Store-owner friendly top summary
+- [x] Skeleton loading state while scan is running
+- [x] Numbered Fix order / action plan cards
+- [x] Action / Why / Done when guidance for priority fixes
+- [x] Catalog details filters: Needs fixes, Critical, Warnings, Clear, Active, All
+- [x] Color-coded issue states in catalog details
 - [ ] Empty states
-- [ ] Loading states
 - [ ] Error states
-- [ ] Better issue grouping/filtering
 - [ ] Product-level issue drilldown
 - [ ] Readiness score weighting refinement
 - [ ] CSV/report preview

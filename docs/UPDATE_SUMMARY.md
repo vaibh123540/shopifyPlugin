@@ -6,16 +6,15 @@
 
 ## What changed
 
-MerchantFix has moved from the duplicate product title checkpoint into the missing product category scanner checkpoint.
+MerchantFix has moved from the missing product category scanner checkpoint into Phase 5 report UI polish.
 
-The dashboard now imports real Shopify product/variant data, imports product category data when present, runs seven scanner rules, displays issue counts, calculates a readiness score, and shows a deterministic fix checklist.
+The first UI polish pass made the scanner report more store-owner friendly, color-coded, and action-oriented. The second UI polish pass added a numbered Fix order and catalog table filters so merchants can quickly understand what to fix first and inspect only the rows that matter.
 
 ## Confirmed progress
 
 - Shopify dev store works.
 - Shopify Admin dev preview works.
 - Embedded app loads inside Shopify Admin.
-- Starter Shopify app template screen was replaced with a MerchantFix dashboard shell.
 - Run Scan imports real Shopify product variants through Shopify Admin GraphQL API.
 - Imported variants are grouped into product snapshots.
 - Missing barcode / GTIN scanner rule is implemented.
@@ -25,13 +24,20 @@ The dashboard now imports real Shopify product/variant data, imports product cat
 - Short product title scanner rule is implemented.
 - Short product description scanner rule is implemented.
 - Duplicate product title scanner rule is implemented.
-- Dashboard displays imported products, imported variants, active variants scanned, and debug table data.
+- Dashboard displays imported products, imported variants, active variants scanned, and catalog details data.
 - Dashboard displays description length for imported product rows.
 - Dashboard displays category status for imported product rows.
 - Dashboard displays real issue counts.
 - Dashboard displays a readiness score.
 - Dashboard displays active scanner checks.
-- Dashboard displays a fix checklist with deterministic suggested fixes.
+- Dashboard displays a color-coded store health state.
+- Dashboard displays a store-owner friendly top summary.
+- Dashboard displays a numbered Fix order / action plan.
+- Fix order cards include Action, Why, and Done when guidance.
+- Dashboard displays skeleton loading while a scan is running.
+- Catalog details table has filters for Needs fixes, Critical, Warnings, Clear, Active, and All.
+- Catalog details issue states are color-coded.
+- Dashboard still includes a deterministic fix checklist with affected examples.
 - Draft and archived products are imported for visibility but skipped from issue counts.
 
 ## Last confirmed scan result
@@ -59,20 +65,18 @@ Confirmed in the Shopify development store on 2026-06-13 11:10:55 local time:
 
 ## Most recent checkpoint
 
-The missing product category rule is working.
+The action-plan UI pass is ready to commit.
 
 Confirmed behavior:
 
-- Missing product category appears in the current phase copy.
-- Missing product category appears in the issue summary.
-- Missing product category appears in active scanner checks.
-- Missing product category appears in the fix checklist when current issues exist.
-- The debug table shows a Category column.
-- Products with no category show `Missing` in the Category column.
-- `Gift Card` shows category `Gift Cards`, so it is not counted as a missing product category issue.
-- Draft and archived products still appear for visibility but do not count as scanner issues.
-- Total issue count increased from 41 to 55 because 14 active products are missing product category.
-- Readiness score dropped from 59 / 100 to 52 / 100 because the scanner added a new product-level check and most active products failed it.
+- Store health is color-coded and appears above raw details.
+- Critical issues appear visually urgent.
+- Warning issues appear as cleanup/quality work.
+- Healthy issue groups appear clear/green.
+- The report surfaces a numbered Fix order.
+- Priority cards explain Action, Why, and Done when.
+- Catalog details can be filtered by Needs fixes, Critical, Warnings, Clear, Active, and All.
+- Skeleton loading appears while a scan is running.
 
 ## Next checkpoint
 
@@ -80,7 +84,12 @@ Before pushing:
 
 1. Run `npm run typecheck`.
 2. Review `git diff`.
-3. Commit the missing product category scanner checkpoint.
+3. Commit the action-plan UI checkpoint.
 4. Push to GitHub.
 
-After pushing, move into Phase 5 report UI polish: empty/loading/error states, better issue grouping/filtering, product-level issue drilldown, and readiness score weighting refinement.
+After pushing, continue Phase 5 report UI polish:
+
+1. Empty states.
+2. Error states.
+3. Product-level issue drilldown.
+4. Readiness score weighting refinement.

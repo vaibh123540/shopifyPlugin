@@ -46,23 +46,29 @@
 - [x] Implement missing product category scanner rule
 - [x] Confirm missing product category finds 14 warning issues in the dev store
 - [x] Confirm readiness score is 52 / 100 after product category rule
+- [x] Add color-coded store health state
+- [x] Add store-owner friendly top summary
+- [x] Add skeleton loading state for scans
+- [x] Add numbered Fix order / action plan cards
+- [x] Add Action / Why / Done when guidance for priority fixes
+- [x] Add catalog details filters: Needs fixes, Critical, Warnings, Clear, Active, All
+- [x] Add color-coded issue states in catalog details
 
 ## Now
 
 - [ ] Run `npm run typecheck`
 - [ ] Fix any TypeScript or route errors from typecheck
 - [ ] Review `git diff`
-- [ ] Commit missing product category scanner checkpoint
+- [ ] Commit action-plan UI checkpoint
 - [ ] Push changes to GitHub
 
 ## Next
 
 - [ ] Add empty states
-- [ ] Add loading states
 - [ ] Add error states
-- [ ] Improve issue grouping/filtering
 - [ ] Improve product-level issue drilldown
 - [ ] Refine readiness score weighting across multiple rules
+- [ ] Improve report copy and hierarchy after user testing
 
 ## Later
 

@@ -14,15 +14,19 @@ Find why your Shopify products might not be ready for Google Shopping.
 
 Shopify merchants running Google Shopping, Performance Max, or free product listings.
 
+The UI should be designed for busy store owners and CEOs: quick to understand, color-coded, action-oriented, and light on developer/debug noise.
+
 ## MVP features
 
 - Shopify OAuth install
 - Import products and variants
 - Scan catalog for common readiness issues
 - Show store readiness score
+- Show color-coded store health state
 - Show issue list by severity
 - Show affected products
-- Show deterministic fix checklist
+- Show deterministic fix checklist / action plan
+- Show filtered catalog details
 - Export CSV later
 - Paid unlock through Shopify Billing later
 
@@ -37,6 +41,7 @@ The dashboard can:
 - Group imported variants into product snapshots.
 - Run deterministic scanner rules.
 - Show a readiness score.
+- Show a color-coded store health state after scan.
 - Show scan status and last scanned timestamp.
 - Show imported product count.
 - Show imported variant count.
@@ -44,9 +49,10 @@ The dashboard can:
 - Show issue summary counts.
 - Show active scanner checks.
 - Show a deterministic fix checklist with affected examples.
-- Show a product variant debug table with issue status.
-- Show product description length in the debug table.
-- Show product category status in the debug table.
+- Show a numbered Fix order / action plan with Action, Why, and Done when guidance.
+- Show skeleton loading while a scan is running.
+- Show a filtered catalog details table with Needs fixes, Critical, Warnings, Clear, Active, and All filters.
+- Show product description length and product category status in the catalog details table.
 
 ## Current scanner rules
 
@@ -60,9 +66,7 @@ Implemented:
 - Short product description
 - Duplicate product title
 
-Not implemented yet:
-
-- No remaining deterministic scanner rule from the current Phase 4 roadmap set.
+The first deterministic scanner rule set is complete.
 
 ## Last confirmed scan result
 
@@ -102,30 +106,37 @@ The current result is expected:
 
 The first scanner promise is to identify active products and variants with catalog data problems that may affect Google Shopping readiness.
 
-The scanner currently ignores draft and archived products for issue counting, but those products still appear in the imported debug table for visibility.
+The scanner currently ignores draft and archived products for issue counting, but those products still appear in the catalog details table for visibility.
 
 ## Current report promise
 
-The dashboard now includes a rule-based fix checklist.
+The dashboard should help a store owner quickly answer:
 
-The checklist tells the merchant:
+1. Is my store in a critical, warning, or healthy state?
+2. What should I fix first?
+3. Why does it matter?
+4. When is that fix considered done?
+5. Which products or variants need action?
 
-- What issue exists.
-- How many affected products or variants exist.
-- Whether the issue is critical or warning-level.
-- What deterministic fix to apply.
-- First affected examples.
+The report currently includes:
+
+- Color-coded store health.
+- Readiness score.
+- Critical/warning/affected product counts.
+- Numbered Fix order cards.
+- Rule-based fix checklist.
+- Filtered catalog details.
+- Skeleton loading while the scan is running.
 
 ## Next product milestone
 
-Improve Phase 5 report UI:
+Continue Phase 5 report UI:
 
 - Empty states
-- Loading states
 - Error states
-- Better issue grouping/filtering
 - Product-level issue drilldown
 - Readiness score weighting refinement
+- CSV/report preview later
 
 After report UI is stronger, move toward CSV/report preview and monetization.
 

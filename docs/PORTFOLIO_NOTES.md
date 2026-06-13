@@ -76,3 +76,17 @@ Move into Phase 5 report UI polish:
 - Readiness score weighting refinement
 
 Do not start Discord or Roblox until the Shopify MVP scanner and report UI are stronger.
+
+## Current UI direction
+
+The Shopify flagship is now moving from scanner coverage into report clarity.
+
+The UI direction is to make MerchantFix feel useful to a busy store owner quickly:
+
+- Color-coded health state.
+- Clear issue priority.
+- Numbered fix order.
+- Short action-oriented guidance.
+- Filtered catalog details below the main summary.
+
+This strengthens MerchantFix before moving to Discord, Roblox, billing, AI, or Google Merchant Center integrations.

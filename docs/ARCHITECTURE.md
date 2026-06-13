@@ -262,3 +262,25 @@ Reason:
 - Agency dashboard
 - Background scan jobs
 - Persistent scan history
+
+## Current report UI behavior
+
+The report UI is moving away from a raw debug dashboard and toward a store-owner/CEO-friendly scan report.
+
+Current behavior:
+
+- A color-coded store health section appears after scan.
+- Red indicates critical fixes needed.
+- Yellow indicates cleanup or warning-level catalog quality work.
+- Green indicates a scanner group is currently clear.
+- Blue is used for informational context.
+- Gray is used before a scan has run.
+- The top report area emphasizes readiness score, issue counts, affected products, and next best action.
+- A numbered Fix order / action plan prioritizes the most important issue groups.
+- Priority cards explain Action, Why, and Done when.
+- The detailed deterministic fix checklist remains available below the action plan.
+- The catalog details table supports filters for Needs fixes, Critical, Warnings, Clear, Active, and All.
+- The catalog details table is still useful for validation, but it is intentionally lower priority than the health summary and fix order.
+- A skeleton loading state appears while the scan is running.
+
+The next report UI improvements should focus on empty states, error states, product-level issue drilldown, and readiness score weighting refinement.

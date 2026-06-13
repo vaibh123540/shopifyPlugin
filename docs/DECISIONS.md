@@ -162,3 +162,39 @@ Reason: Missing category is important catalog quality data, but it should not be
 Decision: After missing product category, consider the first deterministic scanner rule set complete and shift focus to Phase 5 report UI polish.
 
 Reason: The scanner now covers the core first-pass MVP checks from the roadmap. The next highest-leverage work is making the report easier to understand, filter, and act on before adding monetization or AI.
+
+## CEO-friendly report UI decision
+
+Decision: Shift Phase 5 report UI toward a store-owner/CEO-friendly scan report instead of a developer/debug-first dashboard.
+
+Reason: Merchants need to understand store health, critical blockers, and the next best action quickly. Raw scanner/debug detail is useful, but it should be lower priority than the health summary and fix order.
+
+## Color-coded health state decision
+
+Decision: Use color-coded health states after scan: red for critical fixes, yellow for cleanup/warnings, green for clear/healthy, blue for informational context, and gray for not scanned yet.
+
+Reason: Store owners should be able to understand the state of the store subconsciously before reading every line of copy.
+
+## Skeleton loading decision
+
+Decision: Use skeleton loading states while a scan is running.
+
+Reason: Skeletons make the embedded dashboard feel more stable and polished than blank loading text, especially when merchants are waiting for a scan result.
+
+## Fix order action plan decision
+
+Decision: Add a numbered Fix order / action plan above the detailed checklist.
+
+Reason: The detailed checklist explains scanner output, but the merchant also needs a simple prioritized sequence of what to fix first.
+
+## Action / Why / Done when copy decision
+
+Decision: For priority issue groups, show Action, Why, and Done when guidance.
+
+Reason: This gives merchants enough information to act without adding fluffy explanations or requiring them to interpret scanner terminology.
+
+## Catalog details filtering decision
+
+Decision: Add simple catalog details filters: Needs fixes, Critical, Warnings, Clear, Active, and All.
+
+Reason: The imported product/variant table can become noisy. Filters let merchants focus on the rows that matter while preserving full visibility for debugging and validation.

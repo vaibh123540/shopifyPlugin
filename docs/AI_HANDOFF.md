@@ -8,16 +8,16 @@ You are helping build MerchantFix, a Shopify embedded app that scans a merchant'
 - It is not a storefront extension.
 - It is not a checkout extension.
 - MVP is a diagnostic scanner, not a full feed manager.
-- Core flow: install app -> fetch products/variants -> run scanner rules -> show issues -> show deterministic fix checklist -> export report later.
+- Core flow: install app -> fetch products/variants -> run scanner rules -> show issues -> show deterministic fix checklist/action plan -> export report later.
 - Scanner logic should be deterministic.
 - AI is only used later for explanations and rewrite suggestions.
 - We are using TypeScript, React Router Shopify template, Shopify Admin GraphQL API, Prisma, and Shopify Billing later.
 
 ## Current phase
 
-Phase 4's first deterministic scanner set is complete. Phase 5 report UI has started and should be the next focus.
+Phase 4's first deterministic scanner set is complete. Phase 5 report UI polish is in progress.
 
-The dashboard now imports real Shopify product variants, groups them into product snapshots, runs seven deterministic scanner rules, calculates a readiness score, and displays a rule-based fix checklist with affected examples.
+The dashboard now imports real Shopify product variants, groups them into product snapshots, runs seven deterministic scanner rules, calculates a readiness score, and displays a store-owner friendly report with color-coded health, issue summary cards, a numbered Fix order, deterministic fix guidance, skeleton loading, and filtered catalog details.
 
 ## Current implementation
 
@@ -50,18 +50,20 @@ Current dashboard includes:
 - Page heading: MerchantFix
 - Primary action: Run scan
 - Google Shopping readiness scanner intro
-- Current phase card
+- Color-coded store health card
 - Readiness score using active variant and active product checks
 - Scan status card
-- Imported catalog debug cards
+- Imported catalog summary cards
 - Issue summary cards
 - Active scanner checks list
-- Fix checklist with deterministic suggested fixes
-- Imported product variant debug table with issue column
-- Imported product variant debug table with description length column
-- Imported product variant debug table with category column
-- MVP scope sidebar
-- Next build steps sidebar
+- Numbered Fix order / action plan cards
+- Deterministic Action / Why / Done when copy for priority issue groups
+- Fix checklist with deterministic suggested fixes and affected examples
+- Catalog details table with issue column, description length column, and category column
+- Catalog detail filters: Needs fixes, Critical, Warnings, Clear, Active, All
+- Color-coded issue states in the catalog details table
+- Skeleton loading while scans are running
+- MVP scope / color guide sidebar
 
 ## Current scanner behavior
 
@@ -87,7 +89,19 @@ Current dashboard includes:
 - Short product description is a warning issue.
 - Duplicate product title is a warning issue.
 - Calculates a readiness score using the implemented scanner checks.
-- Shows deterministic suggested fixes in a fix checklist.
+- Shows deterministic suggested fixes and action-plan guidance.
+
+## UI direction
+
+Design the report like a busy store owner or CEO will use it:
+
+- Make the status obvious in a few seconds.
+- Use color to communicate health subconsciously.
+- Put critical blockers before cleanup issues.
+- Show enough context to act, without extra fluff.
+- Keep raw/debug detail lower on the page.
+- Prefer action-oriented copy over developer wording.
+- Use skeleton loading states instead of blank or jumpy loading views.
 
 ## Last confirmed working scan
 
@@ -116,11 +130,10 @@ The current issue breakdown is expected because the dev store active variants ar
 
 ## Current known issues
 
-- Suggested fixes exist in the checklist, but detailed filtering/drilldown is still basic.
-- Readiness score weighting is still early and should be refined now that the first scanner set is complete.
 - Empty states are not polished yet.
-- Loading states are not polished yet.
 - Error states are not polished yet.
+- Product-level issue drilldown is not implemented yet.
+- Readiness score weighting is still early and should be refined now that the first scanner set is complete.
 - Shopify Billing is not implemented yet.
 - CSV export is not implemented yet.
 - AI suggestions are not implemented yet.
@@ -135,12 +148,12 @@ The current issue breakdown is expected because the dev store active variants ar
 
 ## Next task
 
-Commit and push the missing product category scanner checkpoint after running typecheck.
+Commit and push the action-plan UI checkpoint after running typecheck.
 
-Then start Phase 5 report UI polish:
+Then continue Phase 5 report UI polish:
 
-1. Empty/loading/error states.
-2. Better issue grouping/filtering.
+1. Empty states.
+2. Error states.
 3. Product-level issue drilldown.
 4. Readiness score weighting refinement.
 

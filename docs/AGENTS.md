@@ -14,8 +14,8 @@ MerchantFix is a Shopify embedded app that scans product catalogs for Google Sho
 - Prefer simple code over clever abstractions.
 - Use TypeScript.
 - Keep database migrations explicit.
-- Update docs when architecture, product status, or major decisions change.
-- Keep the app focused on the current MVP flow: import products/variants -> run scanner rules -> show issues -> show deterministic fix checklist.
+- Update docs when architecture, product status, UI behavior, or major decisions change.
+- Keep the app focused on the current MVP flow: import products/variants -> run scanner rules -> show issues -> show deterministic fix checklist/action plan.
 
 ## Current working checkpoint
 
@@ -29,7 +29,16 @@ The embedded dashboard can import product variants from Shopify Admin GraphQL AP
 - Short product description
 - Duplicate product title
 
-The dashboard also shows a deterministic fix checklist with affected examples.
+The scanner rule set from the first roadmap pass is complete. The current UI checkpoint moved the report toward a store-owner/CEO-friendly dashboard:
+
+- Color-coded store health state after scan.
+- Glanceable readiness score and top business impact summary.
+- Issue summary cards with quick state labels.
+- Numbered Fix order / action plan cards.
+- Deterministic Action / Why / Done when guidance for priority issue groups.
+- Skeleton loading while a scan is running.
+- Catalog details table with simple filters: Needs fixes, Critical, Warnings, Clear, Active, All.
+- Color-coded issue states in the catalog details table.
 
 Current key files:
 
@@ -60,11 +69,11 @@ Read:
 
 ## Current next task
 
-After committing the missing product category scanner checkpoint, move from scanner coverage into Phase 5 report UI polish.
+After committing the CEO-friendly action plan UI checkpoint, continue Phase 5 report UI polish.
 
 Recommended next task:
 
-> Add better empty/loading/error states for the scan flow, then improve issue grouping/filtering and product-level issue drilldown.
+> Add empty and error states for the scan flow, then improve product-level issue drilldown.
 
 Do not start:
 

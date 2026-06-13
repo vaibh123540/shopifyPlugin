@@ -6,9 +6,9 @@
 
 ## Current focus
 
-Phase 4's first deterministic scanner set is complete. Phase 5 report UI has started and should be the next focus.
+Phase 4's first deterministic scanner set is complete. Phase 5 report UI is now in progress.
 
-The latest confirmed state is successful. The embedded Shopify dashboard imports real products and variants, runs seven deterministic scanner rules, displays issue counts, calculates a readiness score, and shows a deterministic fix checklist.
+The latest UI checkpoint shifts the dashboard from a developer-style debug report toward a store-owner/CEO-friendly scanner report. The report is now more glanceable, color-coded, and action-oriented.
 
 ## What works
 
@@ -21,13 +21,6 @@ The latest confirmed state is successful. The embedded Shopify dashboard imports
 - Product variants are imported from Shopify.
 - Product category data is imported from Shopify when present.
 - Imported variants are grouped into product snapshots.
-- Dashboard displays imported product count.
-- Dashboard displays imported variant count.
-- Dashboard displays active variant scan count.
-- Dashboard displays whether more variants exist after the debug import limit.
-- Dashboard displays a product variant debug table.
-- Dashboard displays product description length in the debug table.
-- Dashboard displays product category status in the debug table.
 - Missing barcode / GTIN scanner rule is implemented.
 - Missing vendor / brand scanner rule is implemented.
 - Missing product image scanner rule is implemented.
@@ -37,11 +30,17 @@ The latest confirmed state is successful. The embedded Shopify dashboard imports
 - Duplicate product title scanner rule is implemented.
 - Issue summary shows real counts for implemented scanner rules.
 - A readiness score is calculated from implemented scanner checks.
-- Draft and archived products are imported for debug visibility but skipped from issue counting.
-- The debug table shows draft and archived products with no issue when skipped.
-- Fix checklist UI is implemented.
-- Fix checklist groups issues by rule and shows deterministic suggested fixes.
-- Fix checklist shows first affected examples for each issue group.
+- Draft and archived products are imported for visibility but skipped from issue counting.
+- The dashboard shows a color-coded store health state after scan.
+- The dashboard uses red/yellow/green/blue/gray states to make scan status easier to understand quickly.
+- The dashboard shows a store-owner friendly top summary.
+- The dashboard shows a numbered Fix order / action plan.
+- Fix order cards include Action, Why, and Done when guidance.
+- The dashboard includes skeleton loading while a scan is running.
+- The catalog details table includes filters: Needs fixes, Critical, Warnings, Clear, Active, and All.
+- The catalog details table shows product description length and product category status.
+- The catalog details table color-codes issue state.
+- The deterministic fix checklist is still available with affected examples.
 
 ## Last confirmed scan result
 
@@ -77,12 +76,21 @@ The current result is expected because:
 - 15 active products have descriptions shorter than the current short-description threshold.
 - No active product titles currently collide after duplicate-title normalization.
 
+## Most recent UI checkpoint
+
+The CEO-friendly report UI and action-plan pass is working visually.
+
+Confirmed by user review:
+
+- The color-coded dashboard direction looks good.
+- The next UI phase added a numbered Fix order.
+- The catalog details table now supports quick filters.
+- Skeleton loading is included for scan runs.
+
 ## What is not implemented yet
 
 - Empty states are not polished yet.
-- Loading states are not polished yet.
 - Error states are not polished yet.
-- Better issue grouping/filtering is not implemented yet.
 - Product-level issue drilldown is not implemented yet.
 - Readiness score weighting is still early and should be refined now that the first scanner set is complete.
 - CSV export is not implemented yet.
@@ -101,15 +109,15 @@ The current result is expected because:
 
 ## Next 3 tasks
 
-1. Run `npm run typecheck` after applying the missing product category checkpoint and docs updates.
-2. Commit and push the missing product category scanner checkpoint.
-3. Start Phase 5 report UI polish, beginning with empty/loading/error states or better issue grouping/filtering.
+1. Run `npm run typecheck` after applying the action-plan UI and docs updates.
+2. Commit and push the action-plan UI checkpoint.
+3. Continue Phase 5 report UI polish with empty/error states or product-level issue drilldown.
 
 ## Suggested commit message
 
 ```bash
 git add .
-git commit -m "Add missing product category scanner rule"
+git commit -m "Improve scanner action plan UI"
 git push
 ```
 
@@ -117,4 +125,4 @@ git push
 
 Do not start billing, AI features, storefront widgets, checkout extensions, CSV export, or Google Merchant Center API integration yet.
 
-The next build step should improve the scanner/report experience now that the first deterministic scanner rule set is complete.
+The next build step should continue improving the scanner/report experience for busy store owners.
