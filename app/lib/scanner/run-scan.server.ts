@@ -5,6 +5,7 @@ import {
 import { findMissingBarcodeIssues } from "./rules/missing-barcode.server";
 import { findMissingImageIssues } from "./rules/missing-image.server";
 import { findMissingVendorIssues } from "./rules/missing-vendor.server";
+import { findShortDescriptionIssues } from "./rules/short-description.server";
 import { findShortTitleIssues } from "./rules/short-title.server";
 import {
   getScannableProducts,
@@ -31,6 +32,7 @@ export async function runCatalogScan(
     ...findMissingVendorIssues(importResult.products),
     ...findMissingImageIssues(importResult.products),
     ...findShortTitleIssues(importResult.products),
+    ...findShortDescriptionIssues(importResult.products),
   ];
   const summary = buildScanSummary(importResult, issues);
 
@@ -79,6 +81,9 @@ function buildScanSummary(
   const shortTitleIssues = issues.filter(
     (issue) => issue.ruleId === "short_product_title",
   ).length;
+  const shortDescriptionIssues = issues.filter(
+    (issue) => issue.ruleId === "short_product_description",
+  ).length;
 
   return {
     readinessScore: calculateReadinessScore({
@@ -86,8 +91,9 @@ function buildScanSummary(
         missingBarcodeIssues +
         missingVendorIssues +
         missingImageIssues +
-        shortTitleIssues,
-      totalChecks: scannedVariants + scannableProducts.length * 3,
+        shortTitleIssues +
+        shortDescriptionIssues,
+      totalChecks: scannedVariants + scannableProducts.length * 4,
     }),
     totalIssues: issues.length,
     criticalIssues,
@@ -97,6 +103,7 @@ function buildScanSummary(
     missingVendorIssues,
     missingImageIssues,
     shortTitleIssues,
+    shortDescriptionIssues,
     affectedProducts: affectedProductIds.size,
     affectedVariants: affectedVariantIds.size,
     scannedProducts: scannableProducts.length,
