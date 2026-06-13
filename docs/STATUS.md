@@ -6,9 +6,9 @@
 
 ## Current focus
 
-Phase 4 scanner work is nearly complete for the first deterministic scanner set, and Phase 5 report UI has started.
+Phase 4's first deterministic scanner set is complete. Phase 5 report UI has started and should be the next focus.
 
-The latest confirmed state is successful. The embedded Shopify dashboard imports real products and variants, runs six deterministic scanner rules, displays issue counts, calculates a readiness score, and shows a deterministic fix checklist.
+The latest confirmed state is successful. The embedded Shopify dashboard imports real products and variants, runs seven deterministic scanner rules, displays issue counts, calculates a readiness score, and shows a deterministic fix checklist.
 
 ## What works
 
@@ -19,6 +19,7 @@ The latest confirmed state is successful. The embedded Shopify dashboard imports
 - MerchantFix dashboard shell renders inside Shopify Admin.
 - Run Scan calls the authenticated Shopify Admin GraphQL API.
 - Product variants are imported from Shopify.
+- Product category data is imported from Shopify when present.
 - Imported variants are grouped into product snapshots.
 - Dashboard displays imported product count.
 - Dashboard displays imported variant count.
@@ -26,9 +27,11 @@ The latest confirmed state is successful. The embedded Shopify dashboard imports
 - Dashboard displays whether more variants exist after the debug import limit.
 - Dashboard displays a product variant debug table.
 - Dashboard displays product description length in the debug table.
+- Dashboard displays product category status in the debug table.
 - Missing barcode / GTIN scanner rule is implemented.
 - Missing vendor / brand scanner rule is implemented.
 - Missing product image scanner rule is implemented.
+- Missing product category scanner rule is implemented.
 - Short product title scanner rule is implemented.
 - Short product description scanner rule is implemented.
 - Duplicate product title scanner rule is implemented.
@@ -42,7 +45,7 @@ The latest confirmed state is successful. The embedded Shopify dashboard imports
 
 ## Last confirmed scan result
 
-Confirmed in the Shopify development store on 2026-06-13 11:00:54 local time:
+Confirmed in the Shopify development store on 2026-06-13 11:10:55 local time:
 
 - Scan status: Scan complete
 - Imported products: 17
@@ -52,34 +55,36 @@ Confirmed in the Shopify development store on 2026-06-13 11:00:54 local time:
 - Missing barcode / GTIN issues: 24
 - Missing vendor / brand issues: 0
 - Missing product image issues: 1
+- Missing product category issues: 14
 - Short product title issues: 1
 - Short product description issues: 15
 - Duplicate product title issues: 0
-- Total issues: 41
+- Total issues: 55
 - Critical issues: 25
-- Warning issues: 16
+- Warning issues: 30
 - Affected products: 15
 - Affected variants: 24
-- Readiness score: 59 / 100
+- Readiness score: 52 / 100
 
 The current result is expected because:
 
 - Active variants are missing barcode / GTIN values.
 - All active products have vendor / brand values.
 - `The Minimal Snowboard` is missing a product image.
+- 14 active products are missing a Shopify product category.
+- `Gift Card` has category `Gift Cards`, so it passes the product category rule.
 - `Gift Card` is shorter than the current short-title threshold.
 - 15 active products have descriptions shorter than the current short-description threshold.
 - No active product titles currently collide after duplicate-title normalization.
 
 ## What is not implemented yet
 
-- Missing Google product category rule is not implemented yet.
 - Empty states are not polished yet.
 - Loading states are not polished yet.
 - Error states are not polished yet.
 - Better issue grouping/filtering is not implemented yet.
 - Product-level issue drilldown is not implemented yet.
-- Readiness score weighting is still early and should be refined after more rules are implemented.
+- Readiness score weighting is still early and should be refined now that the first scanner set is complete.
 - CSV export is not implemented yet.
 - Shopify Billing is not implemented yet.
 - AI rewrite suggestions are not implemented yet.
@@ -96,15 +101,15 @@ The current result is expected because:
 
 ## Next 3 tasks
 
-1. Run `npm run typecheck` after applying the duplicate-title checkpoint and docs updates.
-2. Commit and push the duplicate product title scanner checkpoint.
-3. Add the next deterministic scanner rule: missing Google product category.
+1. Run `npm run typecheck` after applying the missing product category checkpoint and docs updates.
+2. Commit and push the missing product category scanner checkpoint.
+3. Start Phase 5 report UI polish, beginning with empty/loading/error states or better issue grouping/filtering.
 
 ## Suggested commit message
 
 ```bash
 git add .
-git commit -m "Add duplicate title scanner rule"
+git commit -m "Add missing product category scanner rule"
 git push
 ```
 
@@ -112,4 +117,4 @@ git push
 
 Do not start billing, AI features, storefront widgets, checkout extensions, CSV export, or Google Merchant Center API integration yet.
 
-The next build step is the final scanner rule in the current roadmap set: missing Google product category.
+The next build step should improve the scanner/report experience now that the first deterministic scanner rule set is complete.

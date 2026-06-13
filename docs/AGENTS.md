@@ -24,6 +24,7 @@ The embedded dashboard can import product variants from Shopify Admin GraphQL AP
 - Missing barcode / GTIN
 - Missing vendor / brand
 - Missing product image
+- Missing product category
 - Short product title
 - Short product description
 - Duplicate product title
@@ -40,6 +41,7 @@ Current key files:
 - `app/lib/scanner/rules/missing-barcode.server.ts`
 - `app/lib/scanner/rules/missing-vendor.server.ts`
 - `app/lib/scanner/rules/missing-image.server.ts`
+- `app/lib/scanner/rules/missing-product-category.server.ts`
 - `app/lib/scanner/rules/short-title.server.ts`
 - `app/lib/scanner/rules/short-description.server.ts`
 - `app/lib/scanner/rules/duplicate-title.server.ts`
@@ -58,9 +60,11 @@ Read:
 
 ## Current next task
 
-After committing the duplicate product title scanner checkpoint, add the next deterministic scanner rule:
+After committing the missing product category scanner checkpoint, move from scanner coverage into Phase 5 report UI polish.
 
-> Missing Google product category rule.
+Recommended next task:
+
+> Add better empty/loading/error states for the scan flow, then improve issue grouping/filtering and product-level issue drilldown.
 
 Do not start:
 
@@ -71,7 +75,7 @@ Do not start:
 - Storefront widgets
 - Checkout extensions
 
-until the deterministic scanner rules and report UI are more complete.
+until the deterministic scanner report UI is stronger.
 
 ## After coding
 

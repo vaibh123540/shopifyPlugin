@@ -43,6 +43,7 @@ Scanner files:
 - `app/lib/scanner/rules/missing-barcode.server.ts`
 - `app/lib/scanner/rules/missing-vendor.server.ts`
 - `app/lib/scanner/rules/missing-image.server.ts`
+- `app/lib/scanner/rules/missing-product-category.server.ts`
 - `app/lib/scanner/rules/short-title.server.ts`
 - `app/lib/scanner/rules/short-description.server.ts`
 - `app/lib/scanner/rules/duplicate-title.server.ts`
@@ -68,10 +69,11 @@ Scanner files:
 4. The action authenticates the admin request.
 5. The app fetches up to 100 product variants from Shopify Admin GraphQL API.
 6. The importer groups variants into product snapshots.
-7. The scanner runs six deterministic rules:
+7. The scanner runs seven deterministic rules:
    - Missing barcode / GTIN
    - Missing vendor / brand
    - Missing product image
+   - Missing product category
    - Short product title
    - Short product description
    - Duplicate product title
@@ -109,6 +111,9 @@ Current imported fields include:
 - Product description HTML if available
 - Product status
 - Product featured image
+- Shopify product category ID
+- Shopify product category name
+- Shopify product category full name/path
 - Variant ID
 - Variant title
 - Variant SKU
@@ -130,6 +135,9 @@ export type ProductSnapshot = {
   description: string;
   status: string;
   featuredImageUrl: string | null;
+  categoryId: string | null;
+  categoryName: string | null;
+  categoryFullName: string | null;
   variants: ProductVariantSnapshot[];
 };
 
@@ -153,12 +161,14 @@ Current scanner behavior:
 - Runs missing barcode / GTIN rule.
 - Runs missing vendor / brand rule.
 - Runs missing product image rule.
+- Runs missing product category rule.
 - Runs short product title rule.
 - Runs short product description rule.
 - Runs duplicate product title rule.
 - Flags active variants with missing barcode / GTIN.
 - Flags active products with missing vendor / brand.
 - Flags active products with missing featured image.
+- Flags active products with missing Shopify product category ID.
 - Flags active products with titles shorter than the current threshold.
 - Flags active products with descriptions shorter than the current threshold.
 - Flags active products whose normalized title appears on more than one active product.
@@ -183,6 +193,13 @@ Current scanner behavior:
 
 - Product-level rule.
 - If an active product has no featured image URL, create a critical issue for that product.
+
+### Missing product category
+
+- Product-level rule.
+- If an active product has no Shopify product category ID, create a warning issue for that product.
+- Current confirmed count: 14 active products.
+- Current confirmed passing example: `Gift Card`, category `Gift Cards`.
 
 ### Short product title
 
@@ -212,6 +229,7 @@ Current checklist supports:
 - Missing barcode / GTIN
 - Missing vendor / brand
 - Missing product image
+- Missing product category
 - Short product title
 - Short product description
 - Duplicate product title

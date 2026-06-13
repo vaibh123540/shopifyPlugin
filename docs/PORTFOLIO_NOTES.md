@@ -14,7 +14,7 @@ MerchantFix is the flagship product in the current 3-product portfolio.
 
 Shopify remains the main build.
 
-Discord and Roblox remain later portfolio ideas. Do not start them until the Shopify scanner MVP has more complete scanner coverage and report UI.
+Discord and Roblox remain later portfolio ideas. Do not start them until the Shopify scanner MVP has stronger report UI and validation.
 
 ## Shopify current checkpoint
 
@@ -24,11 +24,13 @@ MerchantFix has progressed beyond the dashboard shell and initial product import
 
 - Embedded Shopify Admin dashboard.
 - Real product and variant import through Shopify Admin GraphQL API.
+- Product category import when present.
 - Product snapshots grouped from imported variants.
-- Six deterministic scanner rules:
+- Seven deterministic scanner rules:
   - Missing barcode / GTIN
   - Missing vendor / brand
   - Missing product image
+  - Missing product category
   - Short product title
   - Short product description
   - Duplicate product title
@@ -37,7 +39,7 @@ MerchantFix has progressed beyond the dashboard shell and initial product import
 - Active scanner checks list.
 - Fix checklist with deterministic suggested fixes and affected examples.
 - Imported variant debug table.
-- Description length shown in the debug table.
+- Description length and product category shown in the debug table.
 
 Last confirmed Shopify dev-store scan:
 
@@ -49,24 +51,28 @@ Last confirmed Shopify dev-store scan:
 | Missing barcode / GTIN issues | 24 |
 | Missing vendor / brand issues | 0 |
 | Missing product image issues | 1 |
+| Missing product category issues | 14 |
 | Short product title issues | 1 |
 | Short product description issues | 15 |
 | Duplicate product title issues | 0 |
-| Total issues | 41 |
+| Total issues | 55 |
 | Critical issues | 25 |
-| Warning issues | 16 |
+| Warning issues | 30 |
 | Affected products | 15 |
 | Affected variants | 24 |
-| Readiness score | 59 / 100 |
+| Readiness score | 52 / 100 |
 
 This confirms the Shopify flagship has moved from concept into a working scanner MVP path with multiple deterministic rules and a merchant-facing fix checklist.
 
 ## Next Shopify build step
 
-Add the next deterministic scanner rule:
+Move into Phase 5 report UI polish:
 
-> Missing Google product category rule.
-
-After that, improve readiness score weighting, report filtering, and product-level issue detail UI.
+- Empty states
+- Loading states
+- Error states
+- Better issue grouping/filtering
+- Product-level issue drilldown
+- Readiness score weighting refinement
 
 Do not start Discord or Roblox until the Shopify MVP scanner and report UI are stronger.

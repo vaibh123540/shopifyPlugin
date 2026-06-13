@@ -6,6 +6,7 @@ export type IssueRuleId =
   | "missing_barcode_gtin"
   | "missing_vendor_brand"
   | "missing_product_image"
+  | "missing_product_category"
   | "short_product_title"
   | "short_product_description"
   | "duplicate_product_title";
@@ -14,6 +15,7 @@ export type IssueField =
   | "barcode"
   | "vendor"
   | "featuredImage"
+  | "category"
   | "title"
   | "description";
 
@@ -42,6 +44,7 @@ export type ScanSummary = {
   missingBarcodeIssues: number;
   missingVendorIssues: number;
   missingImageIssues: number;
+  missingCategoryIssues: number;
   shortTitleIssues: number;
   shortDescriptionIssues: number;
   duplicateTitleIssues: number;

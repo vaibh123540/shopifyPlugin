@@ -46,6 +46,7 @@ The dashboard can:
 - Show a deterministic fix checklist with affected examples.
 - Show a product variant debug table with issue status.
 - Show product description length in the debug table.
+- Show product category status in the debug table.
 
 ## Current scanner rules
 
@@ -54,17 +55,18 @@ Implemented:
 - Missing barcode / GTIN
 - Missing vendor / brand
 - Missing product image
+- Missing product category
 - Short product title
 - Short product description
 - Duplicate product title
 
 Not implemented yet:
 
-- Missing Google product category
+- No remaining deterministic scanner rule from the current Phase 4 roadmap set.
 
 ## Last confirmed scan result
 
-Confirmed in the Shopify development store on 2026-06-13 11:00:54 local time:
+Confirmed in the Shopify development store on 2026-06-13 11:10:55 local time:
 
 - Scan status: Scan complete
 - Imported products: 17
@@ -74,21 +76,24 @@ Confirmed in the Shopify development store on 2026-06-13 11:00:54 local time:
 - Missing barcode / GTIN issues: 24
 - Missing vendor / brand issues: 0
 - Missing product image issues: 1
+- Missing product category issues: 14
 - Short product title issues: 1
 - Short product description issues: 15
 - Duplicate product title issues: 0
-- Total issues: 41
+- Total issues: 55
 - Critical issues: 25
-- Warning issues: 16
+- Warning issues: 30
 - Affected products: 15
 - Affected variants: 24
-- Readiness score: 59 / 100
+- Readiness score: 52 / 100
 
 The current result is expected:
 
 - Active variants are missing barcode / GTIN values.
 - All active products currently have vendor / brand values.
 - `The Minimal Snowboard` is missing a product image.
+- 14 active products are missing a Shopify product category.
+- `Gift Card` has the category `Gift Cards`, so it passes the product category rule.
 - `Gift Card` is shorter than the current short-title threshold.
 - 15 active products have descriptions shorter than the current short-description threshold.
 - No active products currently have duplicate normalized titles.
@@ -113,9 +118,16 @@ The checklist tells the merchant:
 
 ## Next product milestone
 
-Add the next deterministic scanner rule: missing Google product category.
+Improve Phase 5 report UI:
 
-After that, improve report filtering, issue detail UI, empty/loading/error states, and readiness score weighting.
+- Empty states
+- Loading states
+- Error states
+- Better issue grouping/filtering
+- Product-level issue drilldown
+- Readiness score weighting refinement
+
+After report UI is stronger, move toward CSV/report preview and monetization.
 
 ## Not building yet
 

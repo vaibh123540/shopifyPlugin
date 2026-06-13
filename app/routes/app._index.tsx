@@ -27,6 +27,7 @@ type ProductDebugRow = {
   productStatus: string;
   featuredImageUrl: string | null;
   productDescriptionLength: number;
+  productCategoryFullName: string | null;
   variantId: string;
   variantTitle: string;
   variantSku: string | null;
@@ -176,7 +177,7 @@ export default function Index() {
                 The first deterministic scanner rules are connected. Run scan now
                 imports Shopify variants and flags active products with missing
                 barcode / GTIN, vendor / brand, product image, short title,
-                short description, or duplicate title data.
+                short description, duplicate title, or product category data.
               </s-paragraph>
             </s-stack>
           </s-box>
@@ -196,9 +197,9 @@ export default function Index() {
               <s-paragraph>
                 This first score is based on active product checks for missing
                 barcode / GTIN, missing vendor / brand, missing product
-                image data, short product titles, short product descriptions,
-                and duplicate product titles. More weighting will be added as
-                scanner rules are implemented.
+                image data, missing product categories, short product titles,
+                short product descriptions, and duplicate product titles. More
+                weighting will be added as scanner rules are implemented.
               </s-paragraph>
             </s-stack>
           </s-box>
@@ -311,6 +312,13 @@ export default function Index() {
 
             <s-box padding="base" borderWidth="base" borderRadius="base">
               <s-stack direction="block" gap="small">
+                <s-heading>{summary?.missingCategoryIssues ?? 0}</s-heading>
+                <s-paragraph>Missing product category</s-paragraph>
+              </s-stack>
+            </s-box>
+
+            <s-box padding="base" borderWidth="base" borderRadius="base">
+              <s-stack direction="block" gap="small">
                 <s-heading>{summary?.shortTitleIssues ?? 0}</s-heading>
                 <s-paragraph>Short product title</s-paragraph>
               </s-stack>
@@ -359,6 +367,7 @@ export default function Index() {
                 <s-list-item>Missing barcode / GTIN</s-list-item>
                 <s-list-item>Missing vendor / brand</s-list-item>
                 <s-list-item>Missing product image</s-list-item>
+                <s-list-item>Missing product category</s-list-item>
                 <s-list-item>Short product title</s-list-item>
                 <s-list-item>Short product description</s-list-item>
                 <s-list-item>Duplicate product title</s-list-item>
@@ -446,6 +455,7 @@ export default function Index() {
                   <th style={tableHeaderStyle}>Status</th>
                   <th style={tableHeaderStyle}>Variant</th>
                   <th style={tableHeaderStyle}>Description length</th>
+                  <th style={tableHeaderStyle}>Category</th>
                   <th style={tableHeaderStyle}>SKU</th>
                   <th style={tableHeaderStyle}>Barcode / GTIN</th>
                   <th style={tableHeaderStyle}>Issue</th>
@@ -469,6 +479,9 @@ export default function Index() {
                       <td style={tableCellStyle}>
                         {row.productDescriptionLength} characters
                       </td>
+                      <td style={tableCellStyle}>
+                        {row.productCategoryFullName || "Missing"}
+                      </td>
                       <td style={tableCellStyle}>{row.variantSku || "—"}</td>
                       <td style={tableCellStyle}>
                         {row.variantBarcode || "Missing"}
@@ -482,7 +495,7 @@ export default function Index() {
                   ))
                 ) : (
                   <tr>
-                    <td style={tableCellStyle} colSpan={10}>
+                    <td style={tableCellStyle} colSpan={11}>
                       No product data imported yet. Click Run scan to fetch
                       product variants from Shopify.
                     </td>
@@ -510,7 +523,7 @@ export default function Index() {
 
       <s-section slot="aside" heading="Next build steps">
         <s-unordered-list>
-          <s-list-item>Add missing Google product category rule</s-list-item>
+          <s-list-item>Improve product-level issue grouping</s-list-item>
           <s-list-item>Improve duplicate title UI grouping</s-list-item>
           <s-list-item>Improve readiness score weighting</s-list-item>
           <s-list-item>Add empty, loading, and error states</s-list-item>
@@ -539,6 +552,7 @@ function buildDebugRows(
         productStatus: product.status,
         featuredImageUrl: product.featuredImageUrl,
         productDescriptionLength: product.description.trim().length,
+        productCategoryFullName: product.categoryFullName,
         variantId: variant.id,
         variantTitle: variant.title,
         variantSku: variant.sku,

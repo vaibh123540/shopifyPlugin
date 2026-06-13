@@ -137,3 +137,28 @@ Reason: Duplicate product titles can make catalog review and merchant fixes hard
 Decision: Normalize titles by trimming, lowercasing, and collapsing repeated whitespace before checking duplicates.
 
 Reason: This catches obvious duplicate titles even if casing or spacing differs, while keeping the first version simple and explainable.
+
+
+## Missing product category scanner decision
+
+Decision: Implement missing product category as the seventh deterministic scanner rule.
+
+Reason: Product category is important catalog metadata for product classification and listing readiness. The Shopify Admin GraphQL product category field gives a deterministic first-pass check without connecting to Google Merchant Center.
+
+## Product category import decision
+
+Decision: Import Shopify product category ID, name, and full category name/path from the product data returned with product variants.
+
+Reason: The scanner only needs to know whether a product has a category for the first MVP rule, while the dashboard benefits from displaying a human-readable category value when present.
+
+## Product category severity decision
+
+Decision: Treat missing product category as a warning-level product issue.
+
+Reason: Missing category is important catalog quality data, but it should not be treated as the same severity as missing GTINs or missing product images in the first scanner weighting.
+
+## Phase 4 scanner set completion decision
+
+Decision: After missing product category, consider the first deterministic scanner rule set complete and shift focus to Phase 5 report UI polish.
+
+Reason: The scanner now covers the core first-pass MVP checks from the roadmap. The next highest-leverage work is making the report easier to understand, filter, and act on before adding monetization or AI.

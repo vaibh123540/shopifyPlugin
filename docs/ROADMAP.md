@@ -29,6 +29,8 @@
 - [x] Render imported product count on dashboard
 - [x] Render imported variant count on dashboard
 - [x] Render product data in dashboard table for debugging
+- [x] Add product description import
+- [x] Add Shopify product category import
 - [x] Add `read_products` scope for catalog import
 
 ## Phase 4: Scanner
@@ -39,8 +41,8 @@
 - [x] Short title rule
 - [x] Short description rule
 - [x] Duplicate title rule
-- [ ] Missing product category rule
-- [x] Basic readiness score calculation for scanner rules
+- [x] Missing product category rule
+- [x] Basic readiness score calculation for first scanner rules
 - [x] Issue severity categories
 - [x] Product-level and variant-level scanner issues
 - [x] Skip draft and archived products from issue counts
@@ -50,12 +52,13 @@
 - [x] Real issue summary cards for missing barcode / GTIN
 - [x] Real issue summary cards for missing vendor / brand
 - [x] Real issue summary cards for missing product image
+- [x] Real issue summary cards for missing product category
 - [x] Real issue summary cards for short product title
 - [x] Real issue summary cards for short product description
 - [x] Real issue summary cards for duplicate product title
 - [x] Product issue table flags affected variants
 - [x] Scan status shows imported variants and issue count
-- [x] Debug table shows product, vendor, status, variant, description length, SKU, barcode, issue, price, and image
+- [x] Debug table shows product, vendor, status, variant, description length, category, SKU, barcode, issue, price, and image
 - [x] Suggested deterministic fixes shown in dedicated fix checklist UI
 - [x] Fix checklist shows affected examples
 - [ ] Empty states
@@ -63,6 +66,7 @@
 - [ ] Error states
 - [ ] Better issue grouping/filtering
 - [ ] Product-level issue drilldown
+- [ ] Readiness score weighting refinement
 - [ ] CSV/report preview
 
 ## Phase 6: Monetization

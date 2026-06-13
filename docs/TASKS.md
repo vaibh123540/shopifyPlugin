@@ -22,6 +22,7 @@
 - [x] Display imported product variant debug table
 - [x] Add issue column to debug table
 - [x] Add description length column to debug table
+- [x] Add category column to debug table
 - [x] Implement missing barcode / GTIN scanner rule
 - [x] Skip draft and archived products from issue counting
 - [x] Display real issue summary counts for missing barcode / GTIN
@@ -38,30 +39,33 @@
 - [x] Confirm readiness score is 62 / 100 after short title rule
 - [x] Implement short product description scanner rule
 - [x] Confirm short product description finds 15 warning issues in the dev store
+- [x] Confirm readiness score is 51 / 100 after short description rule
 - [x] Implement duplicate product title scanner rule
-- [x] Confirm duplicate product title finds 0 warning issues in the dev store
+- [x] Confirm duplicate product title finds 0 issues in the dev store
 - [x] Confirm readiness score is 59 / 100 after duplicate title rule
+- [x] Implement missing product category scanner rule
+- [x] Confirm missing product category finds 14 warning issues in the dev store
+- [x] Confirm readiness score is 52 / 100 after product category rule
 
 ## Now
 
 - [ ] Run `npm run typecheck`
 - [ ] Fix any TypeScript or route errors from typecheck
 - [ ] Review `git diff`
-- [ ] Commit duplicate title scanner checkpoint
+- [ ] Commit missing product category scanner checkpoint
 - [ ] Push changes to GitHub
 
 ## Next
 
-- [ ] Add missing Google product category rule
-- [ ] Improve readiness score weighting across multiple rules
-- [ ] Improve issue detail UI and filtering
 - [ ] Add empty states
 - [ ] Add loading states
 - [ ] Add error states
+- [ ] Improve issue grouping/filtering
+- [ ] Improve product-level issue drilldown
+- [ ] Refine readiness score weighting across multiple rules
 
 ## Later
 
-- [ ] Product-level issue drilldown
 - [ ] CSV export
 - [ ] Shopify Billing
 - [ ] AI rewrite suggestions

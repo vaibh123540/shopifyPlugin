@@ -11,6 +11,12 @@ type GraphQLError = {
   message: string;
 };
 
+type ProductCategoryNode = {
+  id: string;
+  name: string;
+  fullName: string;
+};
+
 type ProductVariantNode = {
   id: string;
   title: string;
@@ -25,6 +31,7 @@ type ProductVariantNode = {
     description: string;
     descriptionHtml: string;
     status: string;
+    category: ProductCategoryNode | null;
     featuredMedia: null | {
       __typename: string;
       alt?: string | null;
@@ -65,6 +72,9 @@ export type ProductSnapshot = {
   description: string;
   descriptionHtml: string;
   status: string;
+  categoryId: string | null;
+  categoryName: string | null;
+  categoryFullName: string | null;
   featuredImageUrl: string | null;
   featuredImageAltText: string | null;
   variants: ProductVariantSnapshot[];
@@ -97,6 +107,11 @@ const PRODUCT_VARIANTS_QUERY = `#graphql
           description
           descriptionHtml
           status
+          category {
+            id
+            name
+            fullName
+          }
           featuredMedia {
             __typename
             ... on MediaImage {
@@ -190,6 +205,9 @@ export async function fetchProductSnapshots(
         description: productNode.description,
         descriptionHtml: productNode.descriptionHtml,
         status: productNode.status,
+        categoryId: productNode.category?.id ?? null,
+        categoryName: productNode.category?.name ?? null,
+        categoryFullName: productNode.category?.fullName ?? null,
         featuredImageUrl: getFeaturedImageUrl(productNode.featuredMedia),
         featuredImageAltText: getFeaturedImageAltText(productNode.featuredMedia),
         variants: [variant],

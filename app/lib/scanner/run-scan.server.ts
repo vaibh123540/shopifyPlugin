@@ -5,6 +5,7 @@ import {
 import { findDuplicateTitleIssues } from "./rules/duplicate-title.server";
 import { findMissingBarcodeIssues } from "./rules/missing-barcode.server";
 import { findMissingImageIssues } from "./rules/missing-image.server";
+import { findMissingProductCategoryIssues } from "./rules/missing-product-category.server";
 import { findMissingVendorIssues } from "./rules/missing-vendor.server";
 import { findShortDescriptionIssues } from "./rules/short-description.server";
 import { findShortTitleIssues } from "./rules/short-title.server";
@@ -32,6 +33,7 @@ export async function runCatalogScan(
     ...findMissingBarcodeIssues(importResult.products),
     ...findMissingVendorIssues(importResult.products),
     ...findMissingImageIssues(importResult.products),
+    ...findMissingProductCategoryIssues(importResult.products),
     ...findShortTitleIssues(importResult.products),
     ...findShortDescriptionIssues(importResult.products),
     ...findDuplicateTitleIssues(importResult.products),
@@ -80,6 +82,9 @@ function buildScanSummary(
   const missingImageIssues = issues.filter(
     (issue) => issue.ruleId === "missing_product_image",
   ).length;
+  const missingCategoryIssues = issues.filter(
+    (issue) => issue.ruleId === "missing_product_category",
+  ).length;
   const shortTitleIssues = issues.filter(
     (issue) => issue.ruleId === "short_product_title",
   ).length;
@@ -96,10 +101,11 @@ function buildScanSummary(
         missingBarcodeIssues +
         missingVendorIssues +
         missingImageIssues +
+        missingCategoryIssues +
         shortTitleIssues +
         shortDescriptionIssues +
         duplicateTitleIssues,
-      totalChecks: scannedVariants + scannableProducts.length * 5,
+      totalChecks: scannedVariants + scannableProducts.length * 6,
     }),
     totalIssues: issues.length,
     criticalIssues,
@@ -108,6 +114,7 @@ function buildScanSummary(
     missingBarcodeIssues,
     missingVendorIssues,
     missingImageIssues,
+    missingCategoryIssues,
     shortTitleIssues,
     shortDescriptionIssues,
     duplicateTitleIssues,
